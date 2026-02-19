@@ -13,6 +13,5 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class DtoUserIU {
     @NotNull(message = "User Type cannot be null!")
-    @Enumerated(EnumType.STRING)
     private UserType userType;
 }

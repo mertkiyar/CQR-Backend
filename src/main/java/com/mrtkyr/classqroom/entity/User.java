@@ -41,7 +41,7 @@ public class User {
 
     //TODO When the Department entity is added, it will be updated.
     @Column(name = "department_id", nullable = false)
-    private int departmentId;
+    private Short departmentId;
 
     @Column(name = "is_in_course", nullable = false)
     private boolean inCourse;
