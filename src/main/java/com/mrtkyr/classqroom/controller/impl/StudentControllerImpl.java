@@ -1,8 +1,10 @@
 package com.mrtkyr.classqroom.controller.impl;
 
 import com.mrtkyr.classqroom.controller.IStudentController;
-import com.mrtkyr.classqroom.entity.Student;
+import com.mrtkyr.classqroom.dto.DtoStudent;
+import com.mrtkyr.classqroom.dto.DtoStudentIU;
 import com.mrtkyr.classqroom.service.IStudentService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,19 +20,19 @@ public class StudentControllerImpl implements IStudentController {
 
     @PostMapping(path = "/save")
     @Override
-    public Student saveStudent(@RequestBody Student student) {
-        return studentService.saveStudent(student);
+    public DtoStudent saveStudent(@RequestBody @Valid DtoStudentIU dtoStudentIU) {
+        return studentService.saveStudent(dtoStudentIU);
     }
 
     @GetMapping(path = "/list")
     @Override
-    public List<Student> getAllStudents() {
+    public List<DtoStudent> getAllStudents() {
         return studentService.getAllStudents();
     }
 
     @GetMapping(path = "/get/{id}")
     @Override
-    public Student getStudentById(@PathVariable(name = "id") UUID id) {
+    public DtoStudent getStudentById(@PathVariable(name = "id") UUID id) {
         return studentService.getStudentById(id);
     }
 
@@ -42,7 +44,7 @@ public class StudentControllerImpl implements IStudentController {
 
     @PutMapping(path = "/update/{id}")
     @Override
-    public Student updateStudent(@PathVariable(name = "id") UUID id, @RequestBody Student updateStudent) {
-        return studentService.updateStudent(id, updateStudent);
+    public DtoStudent updateStudent(@PathVariable(name = "id") UUID id, @RequestBody @Valid DtoStudentIU dtoStudentIU) {
+        return studentService.updateStudent(id, dtoStudentIU);
     }
 }

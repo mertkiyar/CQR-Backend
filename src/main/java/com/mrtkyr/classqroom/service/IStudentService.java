@@ -1,19 +1,20 @@
 package com.mrtkyr.classqroom.service;
 
-import com.mrtkyr.classqroom.entity.Student;
+import com.mrtkyr.classqroom.dto.DtoStudent;
+import com.mrtkyr.classqroom.dto.DtoStudentIU;
 
 import java.util.List;
 import java.util.UUID;
 
 public interface IStudentService {
 
-    public Student saveStudent(Student student);
+    public DtoStudent saveStudent(DtoStudentIU dtoStudentIU);
 
-    public List<Student> getAllStudents();
+    public List<DtoStudent> getAllStudents();
 
-    public Student getStudentById(UUID id);
+    public DtoStudent getStudentById(UUID id);
 
     public void deleteStudent(UUID id);
 
-    public Student updateStudent(UUID id, Student updateStudent);
+    public DtoStudent updateStudent(UUID id, DtoStudentIU dtoStudentIU);
 }

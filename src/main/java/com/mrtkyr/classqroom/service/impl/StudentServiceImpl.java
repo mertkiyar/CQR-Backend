@@ -1,12 +1,17 @@
 package com.mrtkyr.classqroom.service.impl;
 
+import com.mrtkyr.classqroom.dto.DtoStudent;
+import com.mrtkyr.classqroom.dto.DtoStudentIU;
 import com.mrtkyr.classqroom.entity.Student;
 import com.mrtkyr.classqroom.repository.StudentRepository;
 import com.mrtkyr.classqroom.service.IStudentService;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -16,44 +21,55 @@ public class StudentServiceImpl implements IStudentService {
     private StudentRepository studentRepository;
 
     @Override
-    public Student saveStudent(Student student) {
-        return studentRepository.save(student);
+    public DtoStudent saveStudent(DtoStudentIU dtoStudentIU) {
+        Student student = new Student();
+        DtoStudent dtoStudent = new DtoStudent();
+        BeanUtils.copyProperties(dtoStudentIU, student);
+        student = studentRepository.save(student);
+        BeanUtils.copyProperties(student, dtoStudent);
+        return dtoStudent;
     }
 
     @Override
-    public List<Student> getAllStudents() {
-        return studentRepository.findAll();
+    public List<DtoStudent> getAllStudents() {
+        List<DtoStudent> dtoStudentList = new ArrayList<>();
+        List<Student> studentList = studentRepository.findAll();
+        for (Student student : studentList) {
+            DtoStudent dtoStudent = new DtoStudent();
+            BeanUtils.copyProperties(student, dtoStudent);
+            dtoStudentList.add(dtoStudent);
+        }
+        return dtoStudentList;
     }
 
     @Override
-    public Student getStudentById(UUID id) {
-        return studentRepository.getStudentById(id);
+    public DtoStudent getStudentById(UUID id) {
+        DtoStudent dtoStudent = new DtoStudent();
+        Optional<Student> optStudent = studentRepository.findById(id);
+        optStudent.ifPresent(student -> BeanUtils.copyProperties(student, dtoStudent));
+        return dtoStudent;
     }
 
     @Override
     public void deleteStudent(UUID id) {
-        boolean isNotDeleted = true;
-        while (isNotDeleted) {
-            Student deleteStudent = getStudentById(id);
-            if (deleteStudent != null) {
-                studentRepository.delete(deleteStudent);
-                isNotDeleted = false;
-            }
-        }
+        Optional<Student> optStudent = studentRepository.findById(id);
+        optStudent.ifPresent(student -> studentRepository.delete(student));
     }
 
     @Override
-    public Student updateStudent(UUID id, Student updateStudent) {
-        Student currentStudent = getStudentById(id);
-        if (currentStudent != null) {
-            currentStudent.setStudentNumber(updateStudent.getStudentNumber());
-            currentStudent.setYearOfStudy(updateStudent.getYearOfStudy());
-            currentStudent.setGpa(updateStudent.getGpa());
-            currentStudent.setCgpa(updateStudent.getCgpa());
-            currentStudent.setActive(updateStudent.isActive());
-            currentStudent.setInCampus(updateStudent.isInCampus());
-
-            return studentRepository.save(currentStudent);
+    public DtoStudent updateStudent(UUID id, DtoStudentIU dtoStudentIU) {
+        DtoStudent dtoStudent = new DtoStudent();
+        Optional<Student> optStudent = studentRepository.findById(id);
+        if (optStudent.isPresent()) {
+            Student student = optStudent.get();
+            student.setYearOfStudy(dtoStudentIU.getYearOfStudy());
+            student.setGpa(dtoStudentIU.getGpa());
+            student.setCgpa(dtoStudentIU.getCgpa());
+            student.setActive(dtoStudentIU.isActive());
+            student.setInCampus(dtoStudentIU.isInCampus());
+            Student updatedStudent = studentRepository.save(student);
+            BeanUtils.copyProperties(updatedStudent, dtoStudent);
+            return dtoStudent;
         }
         return null;
     }
