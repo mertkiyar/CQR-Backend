@@ -32,7 +32,7 @@ public class GlobalExceptionHandler {
     }
 
     private <T> ApiError<T> createApiError(T errors) {
-        ApiError<T> apiError = new ApiError<T>();
+        ApiError<T> apiError = new ApiError<>();
         apiError.setId(UUID.randomUUID());
         apiError.setErrorTime(new Date());
         apiError.setErrors(errors);
