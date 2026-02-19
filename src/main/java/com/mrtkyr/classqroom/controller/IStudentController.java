@@ -8,13 +8,13 @@ import java.util.UUID;
 
 public interface IStudentController {
 
-    public DtoStudent saveStudent(DtoStudentIU dtoStudentIU);
+    DtoStudent saveStudent(DtoStudentIU dtoStudentIU);
 
-    public List<DtoStudent> getAllStudents();
+    List<DtoStudent> getAllStudents();
 
-    public DtoStudent getStudentById(UUID id);
+    DtoStudent getStudentById(UUID id);
 
-    public void deleteStudent(UUID id);
+    void deleteStudent(UUID id);
 
-    public DtoStudent updateStudent(UUID id, DtoStudentIU dtoStudentIU);
+    DtoStudent updateStudent(UUID id, DtoStudentIU dtoStudentIU);
 }
