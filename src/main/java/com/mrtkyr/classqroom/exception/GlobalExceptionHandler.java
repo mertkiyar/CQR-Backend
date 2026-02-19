@@ -6,18 +6,11 @@ import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.servlet.View;
 
 import java.util.*;
 
 @ControllerAdvice
 public class GlobalExceptionHandler {
-
-    private final View error;
-
-    public GlobalExceptionHandler(View error) {
-        this.error = error;
-    }
 
     private List<String> addMapValue(List<String> list, String newValue) {
         list.add((newValue));
