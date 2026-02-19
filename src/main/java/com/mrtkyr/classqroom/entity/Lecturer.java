@@ -2,10 +2,7 @@ package com.mrtkyr.classqroom.entity;
 
 import com.mrtkyr.classqroom.enums.AcademicRole;
 import com.mrtkyr.classqroom.enums.AcademicTitle;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.PrimaryKeyJoinColumn;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -20,10 +17,12 @@ import lombok.NoArgsConstructor;
 @PrimaryKeyJoinColumn(name = "lecturer_id")
 public class Lecturer extends User {
 
-    @Column(name = "lecturer_title")
+    @Column(name = "lecturer_title", nullable = false)
+    @Enumerated(EnumType.STRING)
     private AcademicTitle lecturerTitle;
 
     @Column(name = "lecturer_role", nullable = false)
+    @Enumerated(EnumType.STRING)
     private AcademicRole lecturerRole;
 
     @Column(name = "phone", unique = true)

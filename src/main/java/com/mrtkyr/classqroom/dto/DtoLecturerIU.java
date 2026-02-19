@@ -25,12 +25,12 @@ public class DtoLecturerIU {
     private String lastName;
 
     @NotNull(message = "Gender cannot be null!")
-    @Enumerated(EnumType.STRING)
     private GenderType gender;
 
     @NotNull(message = "Department Id cannot be null!")
     private int departmentId;
 
+    @NotNull(message = "Lecturer Title cannot be null!")
     private AcademicTitle lecturerTitle;
 
     @NotNull(message = "Lecturer Role cannot be null!")
