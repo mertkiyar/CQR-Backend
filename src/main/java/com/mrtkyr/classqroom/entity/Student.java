@@ -3,23 +3,19 @@ package com.mrtkyr.classqroom.entity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import java.math.BigDecimal;
 
-import java.util.UUID;
 
-
+@EqualsAndHashCode(callSuper = true)
 @Entity
 @Table(name = "students")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Student {
-
-    @Id
-    @GeneratedValue
-    @Column(name = "student_id")
-    private UUID id;
+@PrimaryKeyJoinColumn(name = "student_id")
+public class Student extends User{
 
     @Column(name = "student_number", nullable = false, unique = true, length = 10)
     private String studentNumber;
