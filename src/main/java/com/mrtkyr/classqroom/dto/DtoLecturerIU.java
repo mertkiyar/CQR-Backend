@@ -3,8 +3,6 @@ package com.mrtkyr.classqroom.dto;
 import com.mrtkyr.classqroom.enums.AcademicRole;
 import com.mrtkyr.classqroom.enums.AcademicTitle;
 import com.mrtkyr.classqroom.enums.GenderType;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
