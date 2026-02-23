@@ -3,6 +3,9 @@ package com.mrtkyr.classqroom.service.impl;
 import com.mrtkyr.classqroom.dto.DtoLecturer;
 import com.mrtkyr.classqroom.dto.DtoLecturerIU;
 import com.mrtkyr.classqroom.entity.Lecturer;
+import com.mrtkyr.classqroom.enums.MessageType;
+import com.mrtkyr.classqroom.exception.BaseException;
+import com.mrtkyr.classqroom.exception.ErrorMessage;
 import com.mrtkyr.classqroom.repository.LecturerRepository;
 import com.mrtkyr.classqroom.service.ILecturerService;
 import org.springframework.beans.BeanUtils;
@@ -46,14 +49,22 @@ public class LecturerServiceImpl implements ILecturerService {
     public DtoLecturer getLecturerById(UUID id) {
         DtoLecturer dtoLecturer = new DtoLecturer();
         Optional<Lecturer> optLecturer = lecturerRepository.findById(id);
-        optLecturer.ifPresent(lecturer -> BeanUtils.copyProperties(lecturer, dtoLecturer));
+        if (optLecturer.isEmpty()) {
+            throw new BaseException(new ErrorMessage(MessageType.NO_RECORD_EXIST, id.toString()));
+        }
+        Lecturer lecturer = optLecturer.get();
+        BeanUtils.copyProperties(lecturer, dtoLecturer);
         return dtoLecturer;
     }
 
     @Override
     public void deleteLecturer(UUID id) {
         Optional<Lecturer> optLecturer = lecturerRepository.findById(id);
-        optLecturer.ifPresent(lecturer -> lecturerRepository.delete(lecturer));
+        if (optLecturer.isEmpty()) {
+            throw new BaseException(new ErrorMessage(MessageType.NO_RECORD_EXIST, id.toString()));
+        }
+        Lecturer lecturer = optLecturer.get();
+        lecturerRepository.delete(lecturer);
     }
 
     @Override
@@ -70,6 +81,6 @@ public class LecturerServiceImpl implements ILecturerService {
             BeanUtils.copyProperties(updatedLecturer, dtoLecturer);
             return dtoLecturer;
         }
-        return null;
+        throw new BaseException(new ErrorMessage(MessageType.NO_RECORD_EXIST, id.toString()));
     }
 }

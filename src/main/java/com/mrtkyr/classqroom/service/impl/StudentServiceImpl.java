@@ -3,6 +3,9 @@ package com.mrtkyr.classqroom.service.impl;
 import com.mrtkyr.classqroom.dto.DtoStudent;
 import com.mrtkyr.classqroom.dto.DtoStudentIU;
 import com.mrtkyr.classqroom.entity.Student;
+import com.mrtkyr.classqroom.enums.MessageType;
+import com.mrtkyr.classqroom.exception.BaseException;
+import com.mrtkyr.classqroom.exception.ErrorMessage;
 import com.mrtkyr.classqroom.repository.StudentRepository;
 import com.mrtkyr.classqroom.service.IStudentService;
 import org.springframework.beans.BeanUtils;
@@ -46,14 +49,23 @@ public class StudentServiceImpl implements IStudentService {
     public DtoStudent getStudentById(UUID id) {
         DtoStudent dtoStudent = new DtoStudent();
         Optional<Student> optStudent = studentRepository.findById(id);
-        optStudent.ifPresent(student -> BeanUtils.copyProperties(student, dtoStudent));
+
+        if(optStudent.isEmpty()) {
+            throw new BaseException(new ErrorMessage(MessageType.NO_RECORD_EXIST, id.toString()));
+        }
+        Student student = optStudent.get();
+        BeanUtils.copyProperties(student, dtoStudent);
         return dtoStudent;
     }
 
     @Override
     public void deleteStudent(UUID id) {
         Optional<Student> optStudent = studentRepository.findById(id);
-        optStudent.ifPresent(student -> studentRepository.delete(student));
+        if(optStudent.isEmpty()) {
+            throw new BaseException(new ErrorMessage(MessageType.NO_RECORD_EXIST, id.toString()));
+        }
+        Student student = optStudent.get();
+        studentRepository.delete(student);
     }
 
     @Override
@@ -71,6 +83,6 @@ public class StudentServiceImpl implements IStudentService {
             BeanUtils.copyProperties(updatedStudent, dtoStudent);
             return dtoStudent;
         }
-        return null;
+        throw new BaseException(new ErrorMessage(MessageType.NO_RECORD_EXIST, id.toString()));
     }
 }
