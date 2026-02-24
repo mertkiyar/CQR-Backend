@@ -3,6 +3,7 @@ package com.mrtkyr.classqroom.controller.impl;
 import com.mrtkyr.classqroom.controller.IUserController;
 import com.mrtkyr.classqroom.dto.DtoUser;
 import com.mrtkyr.classqroom.dto.DtoUserIU;
+import com.mrtkyr.classqroom.entity.RootEntity;
 import com.mrtkyr.classqroom.service.IUserService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,15 +14,15 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/rest/api/user")
-public class UserControllerImpl implements IUserController {
+public class UserControllerImpl extends RestBaseController implements IUserController {
 
     @Autowired
     private IUserService userService;
 
     @PostMapping(path = "/save")
     @Override
-    public DtoUser saveUser(@RequestBody @Valid DtoUserIU dtoUserIU) {
-        return userService.saveUser(dtoUserIU);
+    public RootEntity<DtoUser> saveUser(@RequestBody @Valid DtoUserIU dtoUserIU) {
+        return ok(userService.saveUser(dtoUserIU));
     }
 
     @GetMapping(path = "/list")
@@ -32,8 +33,8 @@ public class UserControllerImpl implements IUserController {
 
     @GetMapping(path = "/get/{id}")
     @Override
-    public DtoUser getUserById(@PathVariable(name = "id") UUID id) {
-        return userService.getUserById(id);
+    public RootEntity<DtoUser> getUserById(@PathVariable(name = "id") UUID id) {
+        return ok(userService.getUserById(id));
     }
 
     @DeleteMapping(path = "/delete/{id}")
@@ -44,7 +45,7 @@ public class UserControllerImpl implements IUserController {
 
     @PutMapping(path = "/update/{id}")
     @Override
-    public DtoUser updateUser(@PathVariable(name = "id") UUID id,@RequestBody @Valid DtoUserIU dtoUserIU) {
-        return userService.updateUser(id, dtoUserIU);
+    public RootEntity<DtoUser> updateUser(@PathVariable(name = "id") UUID id,@RequestBody @Valid DtoUserIU dtoUserIU) {
+        return ok(userService.updateUser(id, dtoUserIU));
     }
 }

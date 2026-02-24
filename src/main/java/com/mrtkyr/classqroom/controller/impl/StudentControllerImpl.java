@@ -3,6 +3,7 @@ package com.mrtkyr.classqroom.controller.impl;
 import com.mrtkyr.classqroom.controller.IStudentController;
 import com.mrtkyr.classqroom.dto.DtoStudent;
 import com.mrtkyr.classqroom.dto.DtoStudentIU;
+import com.mrtkyr.classqroom.entity.RootEntity;
 import com.mrtkyr.classqroom.service.IStudentService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,15 +14,15 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/rest/api/student")
-public class StudentControllerImpl implements IStudentController {
+public class StudentControllerImpl extends RestBaseController implements IStudentController {
 
     @Autowired
     private IStudentService studentService;
 
     @PostMapping(path = "/save")
     @Override
-    public DtoStudent saveStudent(@RequestBody @Valid DtoStudentIU dtoStudentIU) {
-        return studentService.saveStudent(dtoStudentIU);
+    public RootEntity<DtoStudent> saveStudent(@RequestBody @Valid DtoStudentIU dtoStudentIU) {
+        return ok(studentService.saveStudent(dtoStudentIU));
     }
 
     @GetMapping(path = "/list")
@@ -32,8 +33,8 @@ public class StudentControllerImpl implements IStudentController {
 
     @GetMapping(path = "/get/{id}")
     @Override
-    public DtoStudent getStudentById(@PathVariable(name = "id") UUID id) {
-        return studentService.getStudentById(id);
+    public RootEntity<DtoStudent> getStudentById(@PathVariable(name = "id") UUID id) {
+        return ok(studentService.getStudentById(id));
     }
 
     @DeleteMapping(path = "/delete/{id}")
@@ -44,7 +45,7 @@ public class StudentControllerImpl implements IStudentController {
 
     @PutMapping(path = "/update/{id}")
     @Override
-    public DtoStudent updateStudent(@PathVariable(name = "id") UUID id, @RequestBody @Valid DtoStudentIU dtoStudentIU) {
-        return studentService.updateStudent(id, dtoStudentIU);
+    public RootEntity<DtoStudent> updateStudent(@PathVariable(name = "id") UUID id, @RequestBody @Valid DtoStudentIU dtoStudentIU) {
+        return ok(studentService.updateStudent(id, dtoStudentIU));
     }
 }

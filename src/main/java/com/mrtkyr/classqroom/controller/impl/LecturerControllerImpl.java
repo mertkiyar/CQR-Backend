@@ -3,6 +3,7 @@ package com.mrtkyr.classqroom.controller.impl;
 import com.mrtkyr.classqroom.controller.ILecturerController;
 import com.mrtkyr.classqroom.dto.DtoLecturer;
 import com.mrtkyr.classqroom.dto.DtoLecturerIU;
+import com.mrtkyr.classqroom.entity.RootEntity;
 import com.mrtkyr.classqroom.service.ILecturerService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,15 +14,15 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/rest/api/lecturer")
-public class LecturerControllerImpl implements ILecturerController {
+public class LecturerControllerImpl extends RestBaseController implements ILecturerController {
 
     @Autowired
     private ILecturerService lecturerService;
 
     @PostMapping(path = "/save")
     @Override
-    public DtoLecturer saveLecturer(@RequestBody @Valid DtoLecturerIU dtoLecturerIU) {
-        return lecturerService.saveLecturer(dtoLecturerIU);
+    public RootEntity<DtoLecturer> saveLecturer(@RequestBody @Valid DtoLecturerIU dtoLecturerIU) {
+        return ok(lecturerService.saveLecturer(dtoLecturerIU));
     }
 
     @GetMapping(path = "/list")
@@ -32,8 +33,8 @@ public class LecturerControllerImpl implements ILecturerController {
 
     @GetMapping(path = "/get/{id}")
     @Override
-    public DtoLecturer getLecturerById(@PathVariable(name = "id") UUID id) {
-        return lecturerService.getLecturerById(id);
+    public RootEntity<DtoLecturer> getLecturerById(@PathVariable(name = "id") UUID id) {
+        return ok(lecturerService.getLecturerById(id));
     }
 
     @DeleteMapping(path = "/delete/{id}")
@@ -44,7 +45,7 @@ public class LecturerControllerImpl implements ILecturerController {
 
     @PutMapping(path = "/update/{id}")
     @Override
-    public DtoLecturer updateLecturer(@PathVariable(name = "id") UUID id, @RequestBody @Valid DtoLecturerIU dtoLecturerIU) {
-        return lecturerService.updateLecturer(id, dtoLecturerIU);
+    public RootEntity<DtoLecturer> updateLecturer(@PathVariable(name = "id") UUID id, @RequestBody @Valid DtoLecturerIU dtoLecturerIU) {
+        return ok(lecturerService.updateLecturer(id, dtoLecturerIU));
     }
 }
