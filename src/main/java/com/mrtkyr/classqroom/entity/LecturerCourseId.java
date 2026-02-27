@@ -5,13 +5,14 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.io.Serializable;
 import java.util.UUID;
 
 @Embeddable
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class LecturerCourseId {
+public class LecturerCourseId implements Serializable {
     private UUID lecturerId;
     private UUID courseId;
 }
