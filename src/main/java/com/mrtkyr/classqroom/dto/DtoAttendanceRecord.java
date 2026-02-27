@@ -9,7 +9,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
-import java.net.InetAddress;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
@@ -25,7 +24,7 @@ public class DtoAttendanceRecord {
     private BigDecimal currentLat;
     private BigDecimal currentLong;
     private UUID deviceId;
-    private InetAddress clientIp;
+    private String clientIp;
     private LocalDateTime attendAt;
     private Boolean late;
 }

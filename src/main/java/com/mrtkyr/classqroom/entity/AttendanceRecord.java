@@ -10,7 +10,6 @@ import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 
 import java.math.BigDecimal;
-import java.net.InetAddress;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
@@ -54,7 +53,7 @@ public class AttendanceRecord {
     private UUID deviceId;
 
     @Column(name = "client_ip", nullable = false)
-    private InetAddress clientIp;
+    private String clientIp;
 
     @Column(name = "attend_at", nullable = false)
     @CreationTimestamp
