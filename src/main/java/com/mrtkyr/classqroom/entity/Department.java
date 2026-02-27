@@ -5,6 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 
 import java.time.LocalDateTime;
 
@@ -23,7 +25,8 @@ public class Department {
     @Column(name = "department_name", length = 50, nullable = false)
     private String departmentName;
 
-    @Column(name = "department_code", length = 4, nullable = false)
+    @Column(name = "department_code", length = 4, nullable = false, columnDefinition = "char(6)")
+    @JdbcTypeCode(SqlTypes.CHAR)
     private String departmentCode;
 
     @ManyToOne(optional = false)

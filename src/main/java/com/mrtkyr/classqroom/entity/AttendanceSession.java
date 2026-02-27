@@ -5,7 +5,9 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.annotations.UuidGenerator;
+import org.hibernate.type.SqlTypes;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -26,7 +28,8 @@ public class AttendanceSession {
     @JoinColumn(name = "attendance_id", nullable = false)
     private Attendance attendance;
 
-    @Column(name = "six_digit_code", length = 6)
+    @Column(name = "six_digit_code", length = 6, columnDefinition = "char(6)")
+    @JdbcTypeCode(SqlTypes.CHAR)
     private String sixDigitCode;
 
     @Column(name = "created_at", nullable = false)

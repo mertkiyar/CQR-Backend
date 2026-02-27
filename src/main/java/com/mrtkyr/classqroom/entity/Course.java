@@ -5,7 +5,9 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.annotations.UuidGenerator;
+import org.hibernate.type.SqlTypes;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -26,7 +28,8 @@ public class Course {
     @Column(name = "course_name", nullable = false)
     private String courseName;
 
-    @Column(name = "course_code",length = 7, nullable = false)
+    @Column(name = "course_code",length = 7, nullable = false, columnDefinition = "char(6)")
+    @JdbcTypeCode(SqlTypes.CHAR)
     private String courseCode;
 
     @Column(name = "course_ects", precision = 3, scale = 1)
