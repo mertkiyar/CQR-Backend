@@ -77,8 +77,8 @@ public class StudentServiceImpl implements IStudentService {
             student.setYearOfStudy(dtoStudentIU.getYearOfStudy());
             student.setGpa(dtoStudentIU.getGpa());
             student.setCgpa(dtoStudentIU.getCgpa());
-            student.setActive(dtoStudentIU.isActive());
-            student.setInCampus(dtoStudentIU.isInCampus());
+            student.setActive(dtoStudentIU.getActive());
+            student.setInCampus(dtoStudentIU.getInCampus());
             Student updatedStudent = studentRepository.save(student);
             BeanUtils.copyProperties(updatedStudent, dtoStudent);
             return dtoStudent;

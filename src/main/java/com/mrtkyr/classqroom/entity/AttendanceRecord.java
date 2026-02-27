@@ -38,7 +38,7 @@ public class AttendanceRecord {
     @JoinColumn(name = "attendance_session_id", nullable = false)
     private AttendanceSession attendanceSession;
 
-    @Column(name = "attendance_type")
+    @Column(name = "attendance_type", nullable = false)
     @Enumerated(EnumType.STRING)
     @JdbcTypeCode(SqlTypes.NAMED_ENUM)
     private AttendanceType attendanceType;

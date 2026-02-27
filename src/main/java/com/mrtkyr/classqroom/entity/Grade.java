@@ -32,12 +32,12 @@ public class Grade {
     @JoinColumn(name = "course_id", nullable = false)
     private Course course;
 
-    @Column(name = "assessment_type")
+    @Column(name = "assessment_type", insertable = false, updatable = false)
     @Enumerated(EnumType.STRING)
     @JdbcTypeCode(SqlTypes.NAMED_ENUM)
     private AssessmentType assessmentType;
 
-    @Column(name = "grade")
+    @Column(name = "grade", nullable = false)
     private Integer grade;
 
     @Column(name = "created_at", nullable = false)
