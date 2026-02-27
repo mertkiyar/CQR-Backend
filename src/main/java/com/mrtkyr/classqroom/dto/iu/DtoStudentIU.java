@@ -53,12 +53,12 @@ public class DtoStudentIU {
     private BigDecimal cgpa;
 
     @NotNull(message = "In Course variable cannot be null!")
-    private boolean inCourse;
+    private Boolean inCourse;
 
     @NotNull(message = "Active variable cannot be null!")
-    private boolean active;
+    private Boolean active;
 
     @NotNull(message = "In Campus variable cannot be null!")
-    private boolean inCampus;
+    private Boolean inCampus;
 
 }

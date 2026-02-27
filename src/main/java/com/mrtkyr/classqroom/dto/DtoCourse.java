@@ -23,8 +23,8 @@ public class DtoCourse {
     private Short hoursPractical;
     private Integer minAttendancePercent;
     private Language language;
-    private boolean online;
-    private boolean elective;
+    private Boolean online;
+    private Boolean elective;
     private Department department;
     private LocalDateTime createdAt;
 }

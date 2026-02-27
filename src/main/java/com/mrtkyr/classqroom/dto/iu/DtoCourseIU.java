@@ -50,10 +50,10 @@ public class DtoCourseIU {
     private Language language;
 
     @NotNull(message = "Online variable cannot be null!")
-    private boolean online;
+    private Boolean online;
 
     @NotNull(message = "Elective variable cannot be null!")
-    private boolean elective;
+    private Boolean elective;
 
     @NotNull(message = "Department cannot be null!")
     private Department department;

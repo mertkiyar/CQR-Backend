@@ -18,8 +18,8 @@ public class DtoStudent {
     private Department department;
     private String studentNumber;
     private Integer yearOfStudy;
-    private boolean inCourse;
-    private boolean active;
-    private boolean inCampus;
+    private Boolean inCourse;
+    private Boolean active;
+    private Boolean inCampus;
     private LocalDateTime createdAt;
 }
