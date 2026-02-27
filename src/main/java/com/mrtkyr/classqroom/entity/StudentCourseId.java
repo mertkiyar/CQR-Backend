@@ -15,5 +15,4 @@ import java.util.UUID;
 public class StudentCourseId implements Serializable {
     private UUID studentId;
     private UUID courseId;
-    private boolean active;
 }

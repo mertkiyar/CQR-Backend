@@ -14,5 +14,4 @@ import java.util.UUID;
 public class LecturerCourseId {
     private UUID lecturerId;
     private UUID courseId;
-    private boolean active;
 }
