@@ -4,12 +4,12 @@ import com.mrtkyr.classqroom.entity.Department;
 import com.mrtkyr.classqroom.entity.Language;
 import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
-import lombok.Setter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 
-@Setter
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class DtoCourseIU {
