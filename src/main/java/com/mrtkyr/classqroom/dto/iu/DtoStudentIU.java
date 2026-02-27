@@ -47,7 +47,7 @@ public class DtoStudentIU {
     @DecimalMax(value = "4.00", message = "GPA cannot be upper than 4!")
     private BigDecimal gpa;
 
-    @NotNull(message = "GPA cannot be null!")
+    @NotNull(message = "Cumulative GPA cannot be null!")
     @DecimalMin(value = "0.00", message = "Cumulative GPA cannot be negative!")
     @DecimalMax(value = "4.00", message = "Cumulative GPA cannot be upper than 4!")
     private BigDecimal cgpa;
