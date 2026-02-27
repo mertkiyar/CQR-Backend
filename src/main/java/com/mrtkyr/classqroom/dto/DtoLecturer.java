@@ -1,5 +1,6 @@
 package com.mrtkyr.classqroom.dto;
 
+import com.mrtkyr.classqroom.entity.Department;
 import com.mrtkyr.classqroom.enums.AcademicRole;
 import com.mrtkyr.classqroom.enums.AcademicTitle;
 import com.mrtkyr.classqroom.enums.GenderType;
@@ -16,7 +17,7 @@ public class DtoLecturer {
     private String firstName;
     private String lastName;
     private GenderType gender;
-    private int departmentId;
+    private Department department;
     private AcademicTitle lecturerTitle;
     private AcademicRole lecturerRole;
     private String phone;

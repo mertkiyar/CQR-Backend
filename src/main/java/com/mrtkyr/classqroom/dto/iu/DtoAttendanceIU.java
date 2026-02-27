@@ -33,7 +33,7 @@ public class DtoAttendanceIU {
     private BigDecimal longitude;
 
     @NotNull(message = "Allowed Radius cannot be null!")
-    private int allowedRadiusMeters;
+    private Integer allowedRadiusMeters;
 
     @NotNull(message = "Attendance Type cannot be null!")
     @Enumerated(EnumType.STRING)

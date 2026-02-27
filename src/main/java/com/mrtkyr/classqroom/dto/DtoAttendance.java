@@ -19,7 +19,7 @@ public class DtoAttendance {
     private UUID nfcPath;
     private BigDecimal latitude;
     private BigDecimal longitude;
-    private int allowedRadiusMeters;
+    private Integer allowedRadiusMeters;
     private AttendanceType attendanceType;
     private Short sessionHours;
     private LocalDateTime startedAt;

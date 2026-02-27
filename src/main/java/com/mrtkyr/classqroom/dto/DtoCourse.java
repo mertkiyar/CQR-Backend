@@ -21,7 +21,7 @@ public class DtoCourse {
     private BigDecimal courseCredit;
     private Short hoursTheoretical;
     private Short hoursPractical;
-    private int minAttendancePercent;
+    private Integer minAttendancePercent;
     private Language language;
     private boolean online;
     private boolean elective;

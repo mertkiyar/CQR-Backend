@@ -1,5 +1,6 @@
 package com.mrtkyr.classqroom.dto.iu;
 
+import com.mrtkyr.classqroom.entity.Department;
 import com.mrtkyr.classqroom.enums.AcademicRole;
 import com.mrtkyr.classqroom.enums.AcademicTitle;
 import com.mrtkyr.classqroom.enums.GenderType;
@@ -32,7 +33,7 @@ public class DtoLecturerIU {
     private GenderType gender;
 
     @NotNull(message = "Department Id cannot be null!")
-    private int departmentId;
+    private Department department;
 
     @NotNull(message = "Lecturer Title cannot be null!")
     @Enumerated(EnumType.STRING)

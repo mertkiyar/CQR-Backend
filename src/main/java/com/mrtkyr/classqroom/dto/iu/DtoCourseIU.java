@@ -44,7 +44,7 @@ public class DtoCourseIU {
     @NotNull(message = "Minimum Attendance Percent cannot be null!")
     @Min(value = 0, message = "Minimum Attendance Percent cannot be lower than 0%!")
     @Max(value = 100, message = "Minimum Attendance Percent cannot be upper than 100%!")
-    private int minAttendancePercent;
+    private Integer minAttendancePercent;
 
     @NotNull(message = "Language cannot be null!")
     private Language language;

@@ -1,5 +1,6 @@
 package com.mrtkyr.classqroom.dto.iu;
 
+import com.mrtkyr.classqroom.entity.Department;
 import com.mrtkyr.classqroom.enums.GenderType;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -31,7 +32,7 @@ public class DtoStudentIU {
     private GenderType gender;
 
     @NotNull(message = "Department Id cannot be null!")
-    private int departmentId;
+    private Department department;
 
     @NotNull(message = "Student Number cannot be null!")
     private String studentNumber;
@@ -39,7 +40,7 @@ public class DtoStudentIU {
     @NotNull(message = "Years of Study cannot be null!")
     @Min(value = 0, message = "Years of Study cannot be negative!")
     @Max(value = 6, message = "Years of Study cannot be upper than 6!")
-    private int yearOfStudy;
+    private Integer yearOfStudy;
 
     @NotNull(message = "GPA cannot be null!")
     @DecimalMin(value = "0.00", message = "GPA cannot be negative!")
