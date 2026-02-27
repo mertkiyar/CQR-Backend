@@ -1,7 +1,7 @@
 package com.mrtkyr.classqroom.service;
 
 import com.mrtkyr.classqroom.dto.DtoUser;
-import com.mrtkyr.classqroom.dto.DtoUserIU;
+import com.mrtkyr.classqroom.dto.iu.DtoUserIU;
 
 import java.util.List;
 import java.util.UUID;

@@ -1,13 +1,17 @@
-package com.mrtkyr.classqroom.dto;
+package com.mrtkyr.classqroom.dto.iu;
 
 import com.mrtkyr.classqroom.enums.AcademicRole;
 import com.mrtkyr.classqroom.enums.AcademicTitle;
 import com.mrtkyr.classqroom.enums.GenderType;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 
 @Data
 @NoArgsConstructor
@@ -23,15 +27,21 @@ public class DtoLecturerIU {
     private String lastName;
 
     @NotNull(message = "Gender cannot be null!")
+    @Enumerated(EnumType.STRING)
+    @JdbcTypeCode(SqlTypes.NAMED_ENUM)
     private GenderType gender;
 
     @NotNull(message = "Department Id cannot be null!")
     private int departmentId;
 
     @NotNull(message = "Lecturer Title cannot be null!")
+    @Enumerated(EnumType.STRING)
+    @JdbcTypeCode(SqlTypes.NAMED_ENUM)
     private AcademicTitle lecturerTitle;
 
     @NotNull(message = "Lecturer Role cannot be null!")
+    @Enumerated(EnumType.STRING)
+    @JdbcTypeCode(SqlTypes.NAMED_ENUM)
     private AcademicRole lecturerRole;
 
     @Size(min = 12, max = 15, message = "Phone Number must be between 12 and 15 characters!")

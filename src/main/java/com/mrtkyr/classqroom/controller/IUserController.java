@@ -1,7 +1,7 @@
 package com.mrtkyr.classqroom.controller;
 
 import com.mrtkyr.classqroom.dto.DtoUser;
-import com.mrtkyr.classqroom.dto.DtoUserIU;
+import com.mrtkyr.classqroom.dto.iu.DtoUserIU;
 import com.mrtkyr.classqroom.entity.RootEntity;
 
 import java.util.List;

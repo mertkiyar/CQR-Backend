@@ -2,7 +2,7 @@ package com.mrtkyr.classqroom.controller.impl;
 
 import com.mrtkyr.classqroom.controller.IStudentController;
 import com.mrtkyr.classqroom.dto.DtoStudent;
-import com.mrtkyr.classqroom.dto.DtoStudentIU;
+import com.mrtkyr.classqroom.dto.iu.DtoStudentIU;
 import com.mrtkyr.classqroom.entity.RootEntity;
 import com.mrtkyr.classqroom.service.IStudentService;
 import jakarta.validation.Valid;

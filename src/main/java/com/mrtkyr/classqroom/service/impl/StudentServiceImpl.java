@@ -1,7 +1,7 @@
 package com.mrtkyr.classqroom.service.impl;
 
 import com.mrtkyr.classqroom.dto.DtoStudent;
-import com.mrtkyr.classqroom.dto.DtoStudentIU;
+import com.mrtkyr.classqroom.dto.iu.DtoStudentIU;
 import com.mrtkyr.classqroom.entity.Student;
 import com.mrtkyr.classqroom.enums.MessageType;
 import com.mrtkyr.classqroom.exception.BaseException;

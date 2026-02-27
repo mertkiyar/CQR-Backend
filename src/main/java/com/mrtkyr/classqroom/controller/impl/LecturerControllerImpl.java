@@ -2,7 +2,7 @@ package com.mrtkyr.classqroom.controller.impl;
 
 import com.mrtkyr.classqroom.controller.ILecturerController;
 import com.mrtkyr.classqroom.dto.DtoLecturer;
-import com.mrtkyr.classqroom.dto.DtoLecturerIU;
+import com.mrtkyr.classqroom.dto.iu.DtoLecturerIU;
 import com.mrtkyr.classqroom.entity.RootEntity;
 import com.mrtkyr.classqroom.service.ILecturerService;
 import jakarta.validation.Valid;

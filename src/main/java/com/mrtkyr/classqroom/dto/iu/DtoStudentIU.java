@@ -1,4 +1,4 @@
-package com.mrtkyr.classqroom.dto;
+package com.mrtkyr.classqroom.dto.iu;
 
 import com.mrtkyr.classqroom.enums.GenderType;
 import jakarta.persistence.EnumType;
@@ -7,6 +7,8 @@ import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 
 import java.math.BigDecimal;
 
@@ -25,6 +27,7 @@ public class DtoStudentIU {
 
     @NotNull(message = "Gender cannot be null!")
     @Enumerated(EnumType.STRING)
+    @JdbcTypeCode(SqlTypes.NAMED_ENUM)
     private GenderType gender;
 
     @NotNull(message = "Department Id cannot be null!")
