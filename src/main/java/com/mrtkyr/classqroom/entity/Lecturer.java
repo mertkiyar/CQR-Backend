@@ -7,6 +7,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 
 @EqualsAndHashCode(callSuper = true)
 @Entity
@@ -19,15 +21,17 @@ public class Lecturer extends User {
 
     @Column(name = "lecturer_title", nullable = false)
     @Enumerated(EnumType.STRING)
+    @JdbcTypeCode(SqlTypes.NAMED_ENUM)
     private AcademicTitle lecturerTitle;
 
     @Column(name = "lecturer_role", nullable = false)
     @Enumerated(EnumType.STRING)
+    @JdbcTypeCode(SqlTypes.NAMED_ENUM)
     private AcademicRole lecturerRole;
 
-    @Column(name = "phone", unique = true)
+    @Column(name = "phone", length = 15)
     private String phone;
 
-    @Column(name = "ext_phone", unique = true)
+    @Column(name = "ext_phone", length = 4)
     private String extPhone;
 }

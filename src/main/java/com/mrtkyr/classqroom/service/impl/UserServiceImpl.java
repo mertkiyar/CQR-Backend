@@ -1,7 +1,7 @@
 package com.mrtkyr.classqroom.service.impl;
 
 import com.mrtkyr.classqroom.dto.DtoUser;
-import com.mrtkyr.classqroom.dto.DtoUserIU;
+import com.mrtkyr.classqroom.dto.iu.DtoUserIU;
 import com.mrtkyr.classqroom.entity.User;
 import com.mrtkyr.classqroom.repository.UserRepository;
 import com.mrtkyr.classqroom.service.IUserService;

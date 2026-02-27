@@ -7,7 +7,9 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.annotations.UuidGenerator;
+import org.hibernate.type.SqlTypes;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -33,15 +35,17 @@ public class User {
 
     @Column(name = "gender", nullable = false)
     @Enumerated(EnumType.STRING)
+    @JdbcTypeCode(SqlTypes.NAMED_ENUM)
     private GenderType gender;
 
     @Column(name = "user_type", nullable = false)
     @Enumerated(EnumType.STRING)
+    @JdbcTypeCode(SqlTypes.NAMED_ENUM)
     private UserType userType;
 
-    //TODO When the Department entity is added, it will be updated.
-    @Column(name = "department_id", nullable = false)
-    private Short departmentId;
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "department_id", nullable = false)
+    private Department department;
 
     @Column(name = "is_in_course", nullable = false)
     private boolean inCourse;

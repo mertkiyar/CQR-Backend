@@ -21,7 +21,7 @@ public class Student extends User{
     private String studentNumber;
 
     @Column(name = "year_of_study", nullable = false)
-    private int yearOfStudy;
+    private Integer yearOfStudy;
 
     @Column(name = "gpa", precision = 3, scale = 2, nullable = false)
     private BigDecimal gpa;
