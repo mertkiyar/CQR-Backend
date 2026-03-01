@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/rest/api/attendance-session") //TODO student/attendance/session
+@RequestMapping("/rest/api/attendance/session")
 public class AttendanceSessionControllerImpl extends RestBaseController implements IAttendanceSessionController {
 
     @Autowired
