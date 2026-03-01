@@ -4,12 +4,12 @@ import com.mrtkyr.classqroom.entity.Attendance;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
-import lombok.Setter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
-@Setter
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class DtoAttendanceSessionIU {

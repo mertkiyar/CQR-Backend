@@ -3,9 +3,9 @@ package com.mrtkyr.classqroom.dto.iu;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.Data;
 
-@Setter
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class DtoFacultyIU {

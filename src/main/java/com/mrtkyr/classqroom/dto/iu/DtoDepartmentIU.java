@@ -4,10 +4,10 @@ import com.mrtkyr.classqroom.entity.Faculty;
 import com.mrtkyr.classqroom.entity.Language;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
-@Setter
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class DtoDepartmentIU {

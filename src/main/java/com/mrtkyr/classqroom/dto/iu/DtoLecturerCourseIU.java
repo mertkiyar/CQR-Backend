@@ -4,10 +4,10 @@ import com.mrtkyr.classqroom.entity.Course;
 import com.mrtkyr.classqroom.entity.Lecturer;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
-import lombok.Setter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Setter
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class DtoLecturerCourseIU {
