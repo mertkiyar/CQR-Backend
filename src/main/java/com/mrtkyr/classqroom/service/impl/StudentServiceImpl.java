@@ -49,7 +49,6 @@ public class StudentServiceImpl implements IStudentService {
     public DtoStudent getStudentById(UUID id) {
         DtoStudent dtoStudent = new DtoStudent();
         Optional<Student> optStudent = studentRepository.findById(id);
-
         if(optStudent.isEmpty()) {
             throw new BaseException(new ErrorMessage(MessageType.NO_RECORD_EXIST, id.toString()));
         }

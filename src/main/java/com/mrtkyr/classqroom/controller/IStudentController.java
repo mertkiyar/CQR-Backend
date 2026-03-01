@@ -8,14 +8,9 @@ import java.util.List;
 import java.util.UUID;
 
 public interface IStudentController {
-
     RootEntity<DtoStudent> saveStudent(DtoStudentIU dtoStudentIU);
-
     List<DtoStudent> getAllStudents();
-
     RootEntity<DtoStudent> getStudentById(UUID id);
-
     void deleteStudent(UUID id);
-
     RootEntity<DtoStudent> updateStudent(UUID id, DtoStudentIU dtoStudentIU);
 }

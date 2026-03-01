@@ -8,14 +8,9 @@ import java.util.List;
 import java.util.UUID;
 
 public interface ILecturerController {
-
     RootEntity<DtoLecturer> saveLecturer(DtoLecturerIU dtoLecturerIU);
-
     List<DtoLecturer> getAllLecturers();
-
     RootEntity<DtoLecturer> getLecturerById(UUID id);
-
     void deleteLecturer(UUID id);
-
     RootEntity<DtoLecturer> updateLecturer(UUID id, DtoLecturerIU dtoLecturerIU);
 }
