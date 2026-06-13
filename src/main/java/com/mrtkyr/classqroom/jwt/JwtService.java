@@ -1,5 +1,6 @@
 package com.mrtkyr.classqroom.jwt;
 
+import com.mrtkyr.classqroom.entity.User;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
@@ -24,8 +25,9 @@ public class JwtService {
     }
 
     public String generateToken(UserDetails userDetails) {
+        User user = (User) userDetails;
         Map<String, String> claimsMap = new HashMap<>();
-        claimsMap.put("role", "Admin"); //todo hardcoded Admin Role, change as dynamic, after tests fix it
+        claimsMap.put("role", user.getUserType().name());
         return Jwts.builder()
                 .subject(userDetails.getUsername())
                 .claims(claimsMap)
