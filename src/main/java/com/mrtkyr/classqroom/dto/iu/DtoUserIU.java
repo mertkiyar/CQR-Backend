@@ -15,6 +15,12 @@ import org.hibernate.type.SqlTypes;
 @AllArgsConstructor
 public class DtoUserIU {
 
+    @NotNull(message = "Email cannot be null!")
+    private String email;
+
+    @NotNull(message = "Password cannot be null!")
+    private String password;
+
     @NotNull(message = "User Type cannot be null!")
     @Enumerated(EnumType.STRING)
     @JdbcTypeCode(SqlTypes.NAMED_ENUM)

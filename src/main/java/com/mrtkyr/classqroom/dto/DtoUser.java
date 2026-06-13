@@ -14,6 +14,8 @@ import java.time.LocalDateTime;
 public class DtoUser {
     private String firstName;
     private String lastName;
+    private String email;
+    private String password;
     private GenderType gender;
     private UserType userType;
     private int departmentId;
