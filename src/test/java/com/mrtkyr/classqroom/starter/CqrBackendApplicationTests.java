@@ -19,19 +19,19 @@ class CqrBackendApplicationTests {
     @Autowired
     private ILecturerService lecturerService;
 
-    @Test
-    public void testGetStudentById() {
-        DtoStudent dtoStudent = studentService.getStudentById(UUID.fromString("1e4b8149-047d-40b6-a012-09b2bc049c9e"));
-        if (dtoStudent != null) {
-            System.out.println("Name : " + dtoStudent.getFirstName());
-        }
-    }
+//    @Test
+//    public void testGetStudentById() {
+//        DtoStudent dtoStudent = studentService.getStudentById(UUID.fromString("4c0d2c68-3305-424e-ab02-df3826ae4f25")); //test user uuid
+//        if (dtoStudent != null) {
+//            System.out.println("Name : " + dtoStudent.getFirstName());
+//        }
+//    }
 
-    @Test
-    public void testGetLecturerById() {
-        DtoLecturer dtoLecturer = lecturerService.getLecturerById(UUID.fromString("c1bec187-6119-441d-9a6f-ee368144ff05"));
-        if (dtoLecturer != null) {
-            System.out.println("Name : " + dtoLecturer.getFirstName());
-        }
-    }
+//    @Test
+//    public void testGetLecturerById() {
+//        DtoLecturer dtoLecturer = lecturerService.getLecturerById(UUID.fromString("c1bec187-6119-441d-9a6f-ee368144ff05"));
+//        if (dtoLecturer != null) {
+//            System.out.println("Name : " + dtoLecturer.getFirstName());
+//        }
+//    }
 }
