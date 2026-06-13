@@ -2,6 +2,7 @@ package com.mrtkyr.classqroom.controller.impl;
 
 import com.mrtkyr.classqroom.controller.IRestAuthController;
 import com.mrtkyr.classqroom.dto.DtoUser;
+import com.mrtkyr.classqroom.dto.iu.DtoRegisterRequestIU;
 import com.mrtkyr.classqroom.jwt.AuthRequest;
 import com.mrtkyr.classqroom.jwt.AuthResponse;
 import com.mrtkyr.classqroom.service.IAuthService;
@@ -19,7 +20,7 @@ public class RestAuthControllerImpl implements IRestAuthController {
 
     @PostMapping("/register")
     @Override
-    public DtoUser register(@RequestBody @Valid AuthRequest request) {
+    public DtoUser register(@RequestBody @Valid DtoRegisterRequestIU request) {
         return authService.register(request);
     }
 
