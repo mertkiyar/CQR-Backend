@@ -22,14 +22,14 @@ The main purpose of this project is to manage users, courses, departments, enrol
 - Revised the user, lecturer, and student structure to align with the database design
 - Code optimization and minor refactorings implemented for a cleaner structure
 - Security features (authentication & authorization) implemented (JWT integrated)
+- Dockerized the application and set up Nginx as a reverse proxy
+- Automated deployment to VPS using GitHub Actions (CI/CD pipeline configured)
 
 ---
 
 ## In Progress
 
 - Connect the frontend application to the backend API
-- Deploying the application to virtual private server
-- Setting up CI/CD pipelines for automated testing and deployment
 - Adding unit tests, integration tests, and security tests
 - Enhancing logging and monitoring mechanisms
 - Performance optimizations and codebase refactoring
@@ -45,6 +45,9 @@ The main purpose of this project is to manage users, courses, departments, enrol
 - Spring Data JPA
 - PostgreSQL
 - Maven
+- Docker & Docker Compose
+- Nginx
+- GitHub Actions
 
 ---
 
