@@ -13,8 +13,8 @@ import java.util.*;
 @ControllerAdvice
 public class GlobalExceptionHandler {
 
-    @ExceptionHandler(value = {BaseException.class})
-    public ResponseEntity<ApiError> handleBaseException(BaseException exception, WebRequest request) {
+    @ExceptionHandler(value = { BaseException.class })
+    public ResponseEntity<ApiError<String>> handleBaseException(BaseException exception, WebRequest request) {
         return ResponseEntity.badRequest().body(createApiError(exception.getMessage(), request));
     }
 
