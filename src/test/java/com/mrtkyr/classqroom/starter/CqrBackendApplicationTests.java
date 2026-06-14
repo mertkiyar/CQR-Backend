@@ -1,37 +1,67 @@
 package com.mrtkyr.classqroom.starter;
 
-import com.mrtkyr.classqroom.dto.DtoLecturer;
-import com.mrtkyr.classqroom.dto.DtoStudent;
-import com.mrtkyr.classqroom.service.ILecturerService;
-import com.mrtkyr.classqroom.service.IStudentService;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.mrtkyr.classqroom.jwt.AuthRequest;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.MediaType;
+import org.springframework.test.web.servlet.MockMvc;
 
-import java.util.UUID;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@SpringBootTest(classes = {CqrBackendApplication.class})
+import org.junit.jupiter.api.BeforeEach;
+import org.springframework.web.context.WebApplicationContext;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
+
+@SpringBootTest(classes = { CqrBackendApplication.class })
 class CqrBackendApplicationTests {
 
-    @Autowired
-    private IStudentService studentService;
+    private MockMvc mockMvc;
 
     @Autowired
-    private ILecturerService lecturerService;
+    private WebApplicationContext context;
 
-//    @Test
-//    public void testGetStudentById() {
-//        DtoStudent dtoStudent = studentService.getStudentById(UUID.fromString("4c0d2c68-3305-424e-ab02-df3826ae4f25")); //test user uuid
-//        if (dtoStudent != null) {
-//            System.out.println("Name : " + dtoStudent.getFirstName());
-//        }
-//    }
+    private ObjectMapper objectMapper = new ObjectMapper();
 
-//    @Test
-//    public void testGetLecturerById() {
-//        DtoLecturer dtoLecturer = lecturerService.getLecturerById(UUID.fromString("c1bec187-6119-441d-9a6f-ee368144ff05"));
-//        if (dtoLecturer != null) {
-//            System.out.println("Name : " + dtoLecturer.getFirstName());
-//        }
-//    }
+    @BeforeEach
+    public void setup() {
+        mockMvc = MockMvcBuilders
+                .webAppContextSetup(context)
+                .apply(springSecurity())
+                .build();
+    }
+
+    @Test
+    public void shouldReturn403WhenAccessingProtectedResourceWithoutToken() throws Exception {
+        mockMvc.perform(get("/rest/api/faculty/list"))
+                .andExpect(status().isForbidden());
+    }
+
+    @Test
+    public void shouldReturnTokenWhenLoginWithValidCredentials() throws Exception {
+        AuthRequest loginRequest = new AuthRequest();
+        loginRequest.setEmail("test@classqroom.edu");
+        loginRequest.setPassword("Test1234");
+        
+        mockMvc.perform(post("/authenticate")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(loginRequest)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.token").exists());
+    }
+
+    @Test
+    public void shouldReturn400WhenRegisteringWithEmptyFields() throws Exception {
+        String emptyRegisterRequest = "{}";
+        
+        mockMvc.perform(post("/register")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(emptyRegisterRequest))
+                .andExpect(status().isBadRequest());
+    }
 }
