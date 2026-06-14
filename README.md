@@ -16,18 +16,25 @@ The main purpose of this project is to manage users, courses, departments, enrol
 - Organized and layered package structure created for a cleaner architecture
 - Custom global exception handler written to return clearer and more meaningful error responses
 - DTO structure implemented to prevent direct entity exposure and hide sensitive/unnecessary fields
-- CRUD operations tested with Postman using generated mock data (data can be successfully created, read, updated and deleted)
-- Remaining tables are currently being integrated into the system with their service layers
+- CRUD operations tested with Postman using generated mock data
+- Integrated the rest of the database tables into the existing architecture
+- Written table-specific queries and additional service methods
+- Revised the user, lecturer, and student structure to align with the database design
+- Code optimization and minor refactorings implemented for a cleaner structure
+- Security features (authentication & authorization) implemented (JWT integrated)
 
 ---
 
 ## In Progress
 
-- Integrating the rest of the database tables into the existing architecture
-- Writing table-specific queries and additional service methods where needed
-- Code optimization and small refactorings for cleaner structure
-- Revising the user, lecturer and student structure to make it more compatible with the database design
-- Adding security features (authentication & authorization)
+- Connect the frontend application to the backend API
+- Deploying the application to virtual private server
+- Setting up CI/CD pipelines for automated testing and deployment
+- Adding unit tests, integration tests, and security tests
+- Enhancing logging and monitoring mechanisms
+- Performance optimizations and codebase refactoring
+- Optimizing database queries and indices
+
 
 ---
 
