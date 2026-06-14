@@ -2,13 +2,12 @@ package com.mrtkyr.classqroom.dto;
 
 import com.mrtkyr.classqroom.entity.Department;
 import com.mrtkyr.classqroom.enums.GenderType;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDateTime;
 
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 public class DtoStudent {
