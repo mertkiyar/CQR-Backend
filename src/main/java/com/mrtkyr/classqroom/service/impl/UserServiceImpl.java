@@ -3,6 +3,7 @@ package com.mrtkyr.classqroom.service.impl;
 import com.mrtkyr.classqroom.dto.DtoUser;
 import com.mrtkyr.classqroom.dto.iu.DtoUserIU;
 import com.mrtkyr.classqroom.entity.User;
+import com.mrtkyr.classqroom.jwt.JwtService;
 import com.mrtkyr.classqroom.repository.UserRepository;
 import com.mrtkyr.classqroom.service.IUserService;
 import org.springframework.beans.BeanUtils;
@@ -19,6 +20,8 @@ public class UserServiceImpl implements IUserService {
 
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private JwtService jwtService;
 
     @Override
     public DtoUser saveUser(DtoUserIU dtoUserIU) {
@@ -68,5 +71,14 @@ public class UserServiceImpl implements IUserService {
             return dtoUser;
         }
         return null;
+    }
+
+    @Override
+    public DtoUser getUserByToken(String token) {
+        String username = jwtService.getUsernameByToken(token);
+        DtoUser dtoUser = new DtoUser();
+        Optional<User> optUser = userRepository.findUserByEmail(username);
+        optUser.ifPresent(user -> BeanUtils.copyProperties(user, dtoUser));
+        return dtoUser;
     }
 }

@@ -13,4 +13,5 @@ public interface IUserController {
     RootEntity<DtoUser> getUserById(UUID id);
     void deleteUser(UUID id);
     RootEntity<DtoUser> updateUser(UUID id, DtoUserIU dtoUserIU);
+    RootEntity<DtoUser> getUserByToken(String token);
 }

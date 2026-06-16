@@ -12,4 +12,5 @@ public interface IUserService {
     DtoUser getUserById(UUID id);
     void deleteUser(UUID id);
     DtoUser updateUser(UUID id, DtoUserIU dtoUserIU);
+    DtoUser getUserByToken(String token);
 }

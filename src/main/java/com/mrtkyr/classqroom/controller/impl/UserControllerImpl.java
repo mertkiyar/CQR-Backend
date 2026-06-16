@@ -48,4 +48,13 @@ public class UserControllerImpl extends RestBaseController implements IUserContr
     public RootEntity<DtoUser> updateUser(@PathVariable(name = "id") UUID id,@RequestBody @Valid DtoUserIU dtoUserIU) {
         return ok(userService.updateUser(id, dtoUserIU));
     }
+
+    @GetMapping(path = "/me")
+    @Override
+    public RootEntity<DtoUser> getUserByToken(@RequestHeader("Authorization") String token) {
+        if (token != null && token.startsWith("Bearer ")) {
+            token = token.substring(7);
+        }
+        return ok(userService.getUserByToken(token));
+    }
 }
