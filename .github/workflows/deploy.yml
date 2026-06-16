@@ -14,13 +14,23 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v4
 
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          cache: maven
+
+      - name: Build with Maven (on GitHub Actions Server)
+        run: mvn clean package -DskipTests
+
       - name: Copy repository contents via scp
         uses: appleboy/scp-action@v0.1.7
         with:
           host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USERNAME }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
-          source: "pom.xml,src/,nginx/,Dockerfile,docker-compose.yml,.dockerignore"
+          source: "target/*.jar,nginx/,Dockerfile,docker-compose.yml"
           target: "/opt/classqroom"
           overwrite: true
 
@@ -30,6 +40,8 @@ jobs:
           host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USERNAME }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
+          timeout: 10m
           script: |
             cd /opt/classqroom
-            docker compose up -d --build
+            docker compose build
+            docker compose up -d
