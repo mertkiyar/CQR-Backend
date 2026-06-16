@@ -25,10 +25,8 @@ public class AttendanceRecord {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int attendanceRecordId;
 
-
-    @ManyToOne(optional = false)
-    @JoinColumn(name = "student_id", nullable = false)
-    private Student student;
+    @Column(name = "student_id", nullable = false)
+    private UUID studentId;
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "attendance_id", nullable = false)
