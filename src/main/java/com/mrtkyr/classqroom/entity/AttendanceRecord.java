@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Entity
-@Table(name = "attendance_records", uniqueConstraints = @UniqueConstraint(columnNames = {"student_id", "attendance_id"}))
+@Table(name = "attendance_records")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -27,10 +27,6 @@ public class AttendanceRecord {
 
     @Column(name = "student_id", nullable = false)
     private UUID studentId;
-
-    @ManyToOne(optional = false)
-    @JoinColumn(name = "attendance_id", nullable = false)
-    private Attendance attendance;
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "attendance_session_id", nullable = false)
