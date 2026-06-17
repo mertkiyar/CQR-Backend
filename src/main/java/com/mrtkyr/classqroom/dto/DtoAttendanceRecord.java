@@ -1,6 +1,8 @@
 package com.mrtkyr.classqroom.dto;
 
+import com.mrtkyr.classqroom.entity.Attendance;
 import com.mrtkyr.classqroom.entity.AttendanceSession;
+import com.mrtkyr.classqroom.entity.Student;
 import com.mrtkyr.classqroom.enums.AttendanceType;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -17,7 +19,8 @@ import java.util.UUID;
 @AllArgsConstructor
 public class DtoAttendanceRecord {
     private int attendanceRecordId;
-    private UUID studentId;
+    private Student student;
+    private Attendance attendance;
     private AttendanceSession attendanceSession;
     private AttendanceType attendanceType;
     private BigDecimal currentLat;
