@@ -1,6 +1,7 @@
 package com.mrtkyr.classqroom.controller.impl;
 
 import com.mrtkyr.classqroom.controller.ILecturerCourseController;
+import com.mrtkyr.classqroom.dto.DtoCourse;
 import com.mrtkyr.classqroom.dto.DtoLecturerCourse;
 import com.mrtkyr.classqroom.dto.iu.DtoLecturerCourseIU;
 import com.mrtkyr.classqroom.entity.LecturerCourseId;
@@ -11,9 +12,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController
-@RequestMapping("/rest/api/lecturer/course")
+@RequestMapping("/rest/api/lecturerCourse")
 public class LecturerCourseControllerImpl extends RestBaseController implements ILecturerCourseController {
 
     @Autowired
@@ -47,5 +49,11 @@ public class LecturerCourseControllerImpl extends RestBaseController implements 
     @Override
     public RootEntity<DtoLecturerCourse> updateLecturerCourse(@PathVariable(name = "id") LecturerCourseId id, @RequestBody @Valid DtoLecturerCourseIU dtoLecturerCourseIU) {
         return ok(lecturerCourseService.updateLecturerCourse(id, dtoLecturerCourseIU));
+    }
+
+    @GetMapping("/lecturer/{id}/courses")
+    @Override
+    public RootEntity<List<DtoCourse>> getActiveCoursesByLecturer(@PathVariable(name = "id") UUID lecturerId) {
+        return ok(lecturerCourseService.getActiveCoursesByLecturer(lecturerId));
     }
 }
