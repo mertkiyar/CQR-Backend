@@ -19,7 +19,7 @@ public class AttendanceControllerImpl extends RestBaseController implements IAtt
     @Autowired
     private IAttendanceService attendanceService;
 
-    @PostMapping("/save")
+    @PostMapping("/start")
     @Override
     public RootEntity<DtoAttendance> saveAttendance(@RequestBody @Valid DtoAttendanceIU dtoAttendanceIU) {
         return ok(attendanceService.saveAttendance(dtoAttendanceIU));
