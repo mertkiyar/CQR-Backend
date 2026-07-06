@@ -23,16 +23,14 @@ public class DtoAttendanceIU {
     @NotNull(message = "Course cannot be null!")
     private Course course;
 
-    @NotNull(message = "Nfc Path cannot be null!")
+    // Optional: NFC path is only required when attendance type is NFC
     private UUID nfcPath;
 
-    @NotNull(message = "Latitude cannot be null!")
+    // Optional: location fields are not yet implemented
     private BigDecimal latitude;
 
-    @NotNull(message = "Longitude cannot be null!")
     private BigDecimal longitude;
 
-    @NotNull(message = "Allowed Radius cannot be null!")
     private Integer allowedRadiusMeters;
 
     @NotNull(message = "Attendance Type cannot be null!")
