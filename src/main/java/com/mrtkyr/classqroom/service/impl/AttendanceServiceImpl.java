@@ -3,15 +3,18 @@ package com.mrtkyr.classqroom.service.impl;
 import com.mrtkyr.classqroom.dto.DtoAttendance;
 import com.mrtkyr.classqroom.dto.iu.DtoAttendanceIU;
 import com.mrtkyr.classqroom.entity.Attendance;
+import com.mrtkyr.classqroom.entity.AttendanceSession;
 import com.mrtkyr.classqroom.enums.MessageType;
 import com.mrtkyr.classqroom.exception.BaseException;
 import com.mrtkyr.classqroom.exception.ErrorMessage;
 import com.mrtkyr.classqroom.repository.AttendanceRepository;
+import com.mrtkyr.classqroom.repository.AttendanceSessionRepository;
 import com.mrtkyr.classqroom.service.IAttendanceService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -23,12 +26,22 @@ public class AttendanceServiceImpl implements IAttendanceService {
     @Autowired
     private AttendanceRepository attendanceRepository;
 
+    @Autowired
+    private AttendanceSessionRepository attendanceSessionRepository;
+
     @Override
     public DtoAttendance saveAttendance(DtoAttendanceIU dtoAttendanceIU) {
         DtoAttendance dtoAttendance = new DtoAttendance();
         Attendance attendance = new Attendance();
         BeanUtils.copyProperties(dtoAttendanceIU, attendance);
         attendance = attendanceRepository.save(attendance);
+
+        AttendanceSession initialSession = new AttendanceSession();
+        initialSession.setAttendance(attendance);
+        initialSession.setActive(true);
+        initialSession.setExpiresAt(LocalDateTime.now().plusSeconds(15));
+        attendanceSessionRepository.save(initialSession);
+
         BeanUtils.copyProperties(attendance, dtoAttendance);
         return dtoAttendance;
     }
@@ -49,7 +62,7 @@ public class AttendanceServiceImpl implements IAttendanceService {
     public DtoAttendance getAttendanceById(UUID id) {
         DtoAttendance dtoAttendance = new DtoAttendance();
         Optional<Attendance> optAttendance = attendanceRepository.findById(id);
-        if(optAttendance.isEmpty()) {
+        if (optAttendance.isEmpty()) {
             throw new BaseException(new ErrorMessage(MessageType.NO_RECORD_EXIST, id.toString()));
         }
         Attendance attendance = optAttendance.get();
@@ -60,28 +73,27 @@ public class AttendanceServiceImpl implements IAttendanceService {
     @Override
     public void deleteAttendance(UUID id) {
         Optional<Attendance> optAttendance = attendanceRepository.findById(id);
-        if(optAttendance.isEmpty()) {
+        if (optAttendance.isEmpty()) {
             throw new BaseException(new ErrorMessage(MessageType.NO_RECORD_EXIST, id.toString()));
         }
-        Attendance attendance = optAttendance.get();
-        attendanceRepository.delete(attendance);
+        attendanceRepository.delete(optAttendance.get());
     }
 
     @Override
     public DtoAttendance updateAttendance(UUID id, DtoAttendanceIU dtoAttendanceIU) {
         DtoAttendance dtoAttendance = new DtoAttendance();
         Optional<Attendance> optAttendance = attendanceRepository.findById(id);
-        if(optAttendance.isPresent()) {
-            Attendance attendance = optAttendance.get();
-            attendance.setNfcPath(dtoAttendanceIU.getNfcPath());
-            attendance.setAllowedRadiusMeters(dtoAttendanceIU.getAllowedRadiusMeters());
-            attendance.setAttendanceType(dtoAttendanceIU.getAttendanceType());
-            attendance.setSessionHours(dtoAttendanceIU.getSessionHours());
-            attendance.setActive(dtoAttendanceIU.isActive());
-            Attendance updatedAttendance = attendanceRepository.save(attendance);
-            BeanUtils.copyProperties(updatedAttendance, dtoAttendance);
-            return dtoAttendance;
+        if (optAttendance.isEmpty()) {
+            throw new BaseException(new ErrorMessage(MessageType.NO_RECORD_EXIST, id.toString()));
         }
-        throw new BaseException(new ErrorMessage(MessageType.NO_RECORD_EXIST, id.toString()));
+        Attendance attendance = optAttendance.get();
+        attendance.setNfcPath(dtoAttendanceIU.getNfcPath());
+        attendance.setAllowedRadiusMeters(dtoAttendanceIU.getAllowedRadiusMeters());
+        attendance.setAttendanceType(dtoAttendanceIU.getAttendanceType());
+        attendance.setSessionHours(dtoAttendanceIU.getSessionHours());
+        attendance.setActive(dtoAttendanceIU.isActive());
+        Attendance updatedAttendance = attendanceRepository.save(attendance);
+        BeanUtils.copyProperties(updatedAttendance, dtoAttendance);
+        return dtoAttendance;
     }
 }
