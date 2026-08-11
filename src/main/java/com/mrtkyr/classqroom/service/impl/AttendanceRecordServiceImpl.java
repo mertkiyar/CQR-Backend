@@ -3,10 +3,14 @@ package com.mrtkyr.classqroom.service.impl;
 import com.mrtkyr.classqroom.dto.DtoAttendanceRecord;
 import com.mrtkyr.classqroom.dto.iu.DtoAttendanceRecordIU;
 import com.mrtkyr.classqroom.entity.AttendanceRecord;
+import com.mrtkyr.classqroom.entity.AttendanceSession;
+import com.mrtkyr.classqroom.entity.Student;
 import com.mrtkyr.classqroom.enums.MessageType;
 import com.mrtkyr.classqroom.exception.BaseException;
 import com.mrtkyr.classqroom.exception.ErrorMessage;
 import com.mrtkyr.classqroom.repository.AttendanceRecordRepository;
+import com.mrtkyr.classqroom.repository.AttendanceSessionRepository;
+import com.mrtkyr.classqroom.repository.StudentRepository;
 import com.mrtkyr.classqroom.service.IAttendanceRecordService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,13 +27,34 @@ public class AttendanceRecordServiceImpl implements IAttendanceRecordService {
     @Autowired
     private AttendanceRecordRepository attendanceRecordRepository;
 
+    @Autowired
+    private StudentRepository studentRepository;
+
+    @Autowired
+    private AttendanceSessionRepository attendanceSessionRepository;
+
     @Override
     public DtoAttendanceRecord saveAttendanceRecord(DtoAttendanceRecordIU dtoAttendanceRecordIU) {
+        Student student = studentRepository.findById(dtoAttendanceRecordIU.getStudentId())
+                .orElseThrow(() -> new BaseException(new ErrorMessage(MessageType.NO_RECORD_EXIST, dtoAttendanceRecordIU.getStudentId().toString())));
+
+        AttendanceSession attendanceSession = attendanceSessionRepository.findById(dtoAttendanceRecordIU.getAttendanceSessionId())
+                .orElseThrow(() -> new BaseException(new ErrorMessage(MessageType.NO_RECORD_EXIST, dtoAttendanceRecordIU.getAttendanceSessionId().toString())));
+
         AttendanceRecord attendanceRecord = new AttendanceRecord();
+        attendanceRecord.setStudent(student);
+        attendanceRecord.setAttendanceSession(attendanceSession);
+        attendanceRecord.setAttendanceType(dtoAttendanceRecordIU.getAttendanceType());
+        attendanceRecord.setCurrentLat(dtoAttendanceRecordIU.getCurrentLat());
+        attendanceRecord.setCurrentLong(dtoAttendanceRecordIU.getCurrentLong());
+        attendanceRecord.setAttendAt(dtoAttendanceRecordIU.getAttendAt());
+        attendanceRecord.setLate(dtoAttendanceRecordIU.getLate());
+        attendanceRecord.setDeviceId(dtoAttendanceRecordIU.getDeviceId());
+        attendanceRecord.setClientIp(dtoAttendanceRecordIU.getClientIp());
+
+        AttendanceRecord saved = attendanceRecordRepository.save(attendanceRecord);
         DtoAttendanceRecord dtoAttendanceRecord = new DtoAttendanceRecord();
-        BeanUtils.copyProperties(dtoAttendanceRecordIU, attendanceRecord);
-        attendanceRecord = attendanceRecordRepository.save(attendanceRecord);
-        BeanUtils.copyProperties(attendanceRecord, dtoAttendanceRecord);
+        BeanUtils.copyProperties(saved, dtoAttendanceRecord);
         return dtoAttendanceRecord;
     }
 
@@ -49,33 +74,33 @@ public class AttendanceRecordServiceImpl implements IAttendanceRecordService {
     public DtoAttendanceRecord getAttendanceRecordById(UUID id) {
         DtoAttendanceRecord dtoAttendanceRecord = new DtoAttendanceRecord();
         Optional<AttendanceRecord> optAttendanceRecord = attendanceRecordRepository.findById(id);
-        if(optAttendanceRecord.isEmpty()) {
+        if (optAttendanceRecord.isEmpty()) {
             throw new BaseException(new ErrorMessage(MessageType.NO_RECORD_EXIST, id.toString()));
         }
-        AttendanceRecord attendanceRecord = optAttendanceRecord.get();
-        BeanUtils.copyProperties(attendanceRecord, dtoAttendanceRecord);
+        BeanUtils.copyProperties(optAttendanceRecord.get(), dtoAttendanceRecord);
         return dtoAttendanceRecord;
     }
 
     @Override
     public void deleteAttendanceRecord(UUID id) {
         Optional<AttendanceRecord> optAttendanceRecord = attendanceRecordRepository.findById(id);
-        if(optAttendanceRecord.isEmpty()) {
+        if (optAttendanceRecord.isEmpty()) {
             throw new BaseException(new ErrorMessage(MessageType.NO_RECORD_EXIST, id.toString()));
         }
-        AttendanceRecord attendanceRecord = optAttendanceRecord.get();
-        attendanceRecordRepository.delete(attendanceRecord);
+        attendanceRecordRepository.delete(optAttendanceRecord.get());
     }
 
     @Override
     public DtoAttendanceRecord updateAttendanceRecord(UUID id, DtoAttendanceRecordIU dtoAttendanceRecordIU) {
         DtoAttendanceRecord dtoAttendanceRecord = new DtoAttendanceRecord();
         Optional<AttendanceRecord> optAttendanceRecord = attendanceRecordRepository.findById(id);
-        if(optAttendanceRecord.isPresent()) {
-            AttendanceRecord attendanceRecord = optAttendanceRecord.get();
-            attendanceRecord.setLate(dtoAttendanceRecordIU.getLate());
-            return dtoAttendanceRecord;
+        if (optAttendanceRecord.isEmpty()) {
+            throw new BaseException(new ErrorMessage(MessageType.NO_RECORD_EXIST, id.toString()));
         }
-        throw new BaseException(new ErrorMessage(MessageType.NO_RECORD_EXIST, id.toString()));
+        AttendanceRecord attendanceRecord = optAttendanceRecord.get();
+        attendanceRecord.setLate(dtoAttendanceRecordIU.getLate());
+        AttendanceRecord updated = attendanceRecordRepository.save(attendanceRecord);
+        BeanUtils.copyProperties(updated, dtoAttendanceRecord);
+        return dtoAttendanceRecord;
     }
 }

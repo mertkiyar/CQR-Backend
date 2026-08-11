@@ -1,7 +1,5 @@
 package com.mrtkyr.classqroom.dto.iu;
 
-import com.mrtkyr.classqroom.entity.AttendanceSession;
-import com.mrtkyr.classqroom.entity.Student;
 import com.mrtkyr.classqroom.enums.AttendanceType;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -23,10 +21,10 @@ import java.util.UUID;
 public class DtoAttendanceRecordIU {
 
     @NotNull(message = "Student cannot be null!")
-    private Student student;
+    private UUID studentId;
 
     @NotNull(message = "Attendance Session cannot be null!")
-    private AttendanceSession attendanceSession;
+    private UUID attendanceSessionId;
 
     @NotNull(message = "Attendance Type cannot be null!")
     @Enumerated(EnumType.STRING)
