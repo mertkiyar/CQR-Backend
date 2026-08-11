@@ -12,4 +12,5 @@ public interface IAttendanceSessionService {
     DtoAttendanceSession getAttendanceSessionById(UUID id);
     void deleteAttendanceSession(UUID id);
     DtoAttendanceSession updateAttendanceSession(UUID id, DtoAttendanceSessionIU dtoAttendanceSessionIU);
+    DtoAttendanceSession getCurrentSessionByAttendanceId(UUID attendanceId);
 }

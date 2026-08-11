@@ -49,7 +49,7 @@ public class AttendanceSessionServiceImpl implements IAttendanceSessionService {
     public DtoAttendanceSession getAttendanceSessionById(UUID id) {
         DtoAttendanceSession dtoAttendanceSession = new DtoAttendanceSession();
         Optional<AttendanceSession> optAttendanceSession = attendanceSessionRepository.findById(id);
-        if(optAttendanceSession.isEmpty()) {
+        if (optAttendanceSession.isEmpty()) {
             throw new BaseException(new ErrorMessage(MessageType.NO_RECORD_EXIST, id.toString()));
         }
         AttendanceSession attendanceSession = optAttendanceSession.get();
@@ -60,22 +60,35 @@ public class AttendanceSessionServiceImpl implements IAttendanceSessionService {
     @Override
     public void deleteAttendanceSession(UUID id) {
         Optional<AttendanceSession> optAttendanceSession = attendanceSessionRepository.findById(id);
-        if(optAttendanceSession.isEmpty()) {
+        if (optAttendanceSession.isEmpty()) {
             throw new BaseException(new ErrorMessage(MessageType.NO_RECORD_EXIST, id.toString()));
         }
-        AttendanceSession attendanceSession = optAttendanceSession.get();
-        attendanceSessionRepository.delete(attendanceSession);
+        attendanceSessionRepository.delete(optAttendanceSession.get());
     }
 
     @Override
     public DtoAttendanceSession updateAttendanceSession(UUID id, DtoAttendanceSessionIU dtoAttendanceSessionIU) {
         DtoAttendanceSession dtoAttendanceSession = new DtoAttendanceSession();
         Optional<AttendanceSession> optAttendanceSession = attendanceSessionRepository.findById(id);
-        if(optAttendanceSession.isPresent()) {
-            AttendanceSession attendanceSession = optAttendanceSession.get();
-            attendanceSession.setActive(dtoAttendanceSessionIU.isActive());
-            return dtoAttendanceSession;
+        if (optAttendanceSession.isEmpty()) {
+            throw new BaseException(new ErrorMessage(MessageType.NO_RECORD_EXIST, id.toString()));
         }
-        throw new BaseException(new ErrorMessage(MessageType.NO_RECORD_EXIST, id.toString()));
+        AttendanceSession attendanceSession = optAttendanceSession.get();
+        attendanceSession.setActive(dtoAttendanceSessionIU.isActive());
+        AttendanceSession updated = attendanceSessionRepository.save(attendanceSession);
+        BeanUtils.copyProperties(updated, dtoAttendanceSession);
+        return dtoAttendanceSession;
+    }
+
+    @Override
+    public DtoAttendanceSession getCurrentSessionByAttendanceId(UUID attendanceId) {
+        DtoAttendanceSession dtoAttendanceSession = new DtoAttendanceSession();
+        Optional<AttendanceSession> optSession = attendanceSessionRepository
+                .findFirstByAttendance_AttendanceIdAndActiveTrueOrderByCreatedAtDesc(attendanceId);
+        if (optSession.isEmpty()) {
+            throw new BaseException(new ErrorMessage(MessageType.NO_ACTIVE_SESSION, attendanceId.toString()));
+        }
+        BeanUtils.copyProperties(optSession.get(), dtoAttendanceSession);
+        return dtoAttendanceSession;
     }
 }

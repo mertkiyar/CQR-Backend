@@ -26,6 +26,7 @@ public enum MessageType {
     // 4xxx - Business Logic Errors
     BUSINESS_RULE_VIOLATION("4001", "Business rule violation!"),
     OPERATION_NOT_ALLOWED("4002", "Operation not allowed!"),
+    NO_ACTIVE_SESSION("4003", "No active session found for this attendance!"),
 
     // 5xxx - System Errors
     DATABASE_ERROR("5001", "Database error occurred!"),

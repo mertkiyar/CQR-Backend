@@ -13,4 +13,5 @@ public interface IAttendanceSessionController {
     RootEntity<DtoAttendanceSession> getAttendanceSessionById(UUID id);
     void deleteAttendanceSession(UUID id);
     RootEntity<DtoAttendanceSession> updateAttendanceSession(UUID id, DtoAttendanceSessionIU dtoAttendanceSessionIU);
+    RootEntity<DtoAttendanceSession> getCurrentSessionByAttendanceId(UUID attendanceId);
 }

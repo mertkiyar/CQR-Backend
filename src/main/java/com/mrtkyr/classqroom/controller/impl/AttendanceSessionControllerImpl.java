@@ -48,4 +48,10 @@ public class AttendanceSessionControllerImpl extends RestBaseController implemen
     public RootEntity<DtoAttendanceSession> updateAttendanceSession(@PathVariable(name = "id") UUID id, @RequestBody @Valid DtoAttendanceSessionIU dtoAttendanceSessionIU) {
         return ok(attendanceSessionService.updateAttendanceSession(id, dtoAttendanceSessionIU));
     }
+
+    @GetMapping("/current/{attendanceId}")
+    @Override
+    public RootEntity<DtoAttendanceSession> getCurrentSessionByAttendanceId(@PathVariable(name = "attendanceId") UUID attendanceId) {
+        return ok(attendanceSessionService.getCurrentSessionByAttendanceId(attendanceId));
+    }
 }

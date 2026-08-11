@@ -1,9 +1,14 @@
 package com.mrtkyr.classqroom.repository;
 
+import com.mrtkyr.classqroom.entity.Attendance;
 import com.mrtkyr.classqroom.entity.AttendanceSession;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 public interface AttendanceSessionRepository extends JpaRepository<AttendanceSession, UUID> {
+    List<AttendanceSession> findByAttendanceAndActiveTrue(Attendance attendance);
+    Optional<AttendanceSession> findFirstByAttendance_AttendanceIdAndActiveTrueOrderByCreatedAtDesc(UUID attendanceId);
 }
