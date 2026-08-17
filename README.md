@@ -22,8 +22,12 @@ The main purpose of this project is to manage users, courses, departments, enrol
 - Revised the user, lecturer, and student structure to align with the database design
 - Code optimization and minor refactorings implemented for a cleaner structure
 - Security features (authentication & authorization) implemented (JWT integrated)
-- Dockerized the application and set up Nginx as a reverse proxy
-- Automated deployment to VPS using GitHub Actions (CI/CD pipeline configured)
+- Automated deployment to VPS using GitHub Actions (CI/CD pipeline optimized)
+- Moved QR session generation entirely to the backend with a 15-second rotation scheduler
+- Added /me endpoint for fetching current user profiles via JWT
+- Integrated Swagger UI for interactive and comprehensive API documentation
+- Implemented robust duplicate email validation and student-specific registration flows
+
 
 ---
 
