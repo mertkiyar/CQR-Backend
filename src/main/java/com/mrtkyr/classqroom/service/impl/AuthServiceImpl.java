@@ -4,11 +4,14 @@ import com.mrtkyr.classqroom.dto.DtoUser;
 import com.mrtkyr.classqroom.dto.iu.DtoRegisterRequestIU;
 import com.mrtkyr.classqroom.entity.Department;
 import com.mrtkyr.classqroom.entity.Student;
+import com.mrtkyr.classqroom.enums.MessageType;
 import com.mrtkyr.classqroom.enums.UserType;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import com.mrtkyr.classqroom.entity.User;
+import com.mrtkyr.classqroom.exception.BaseException;
+import com.mrtkyr.classqroom.exception.ErrorMessage;
 import com.mrtkyr.classqroom.jwt.AuthRequest;
 import com.mrtkyr.classqroom.jwt.AuthResponse;
 import com.mrtkyr.classqroom.jwt.JwtService;
@@ -43,6 +46,13 @@ public class AuthServiceImpl implements IAuthService {
     @Override
     public DtoUser register(DtoRegisterRequestIU request) {
         DtoUser dtoUser = new DtoUser();
+        
+        if (userRepository.findUserByEmail(request.getEmail()).isPresent()) {
+            throw new BaseException(
+                new ErrorMessage(MessageType.RECORD_ALREADY_EXIST, "Email is already in use: " + request.getEmail())
+            );
+        }
+
         Department department = departmentRepository.findById((short) request.getDepartmentId())
                 .orElseThrow(() -> new RuntimeException("Department not found"));
 
