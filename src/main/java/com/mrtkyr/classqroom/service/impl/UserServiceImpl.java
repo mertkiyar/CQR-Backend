@@ -24,16 +24,6 @@ public class UserServiceImpl implements IUserService {
     private JwtService jwtService;
 
     @Override
-    public DtoUser saveUser(DtoUserIU dtoUserIU) {
-        User user = new User();
-        DtoUser dtoUser = new DtoUser();
-        BeanUtils.copyProperties(dtoUserIU, user);
-        user = userRepository.save(user);
-        BeanUtils.copyProperties(user, dtoUser);
-        return dtoUser;
-    }
-
-    @Override
     public List<DtoUser> getAllUsers() {
         List<DtoUser> dtoUserList = new ArrayList<>();
         List<User> userList = userRepository.findAll();

@@ -19,12 +19,6 @@ public class UserControllerImpl extends RestBaseController implements IUserContr
     @Autowired
     private IUserService userService;
 
-    @PostMapping(path = "/save")
-    @Override
-    public RootEntity<DtoUser> saveUser(@RequestBody @Valid DtoUserIU dtoUserIU) {
-        return ok(userService.saveUser(dtoUserIU));
-    }
-
     @GetMapping(path = "/list")
     @Override
     public List<DtoUser> getAllUsers() {

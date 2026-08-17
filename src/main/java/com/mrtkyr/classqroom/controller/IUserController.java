@@ -8,7 +8,6 @@ import java.util.List;
 import java.util.UUID;
 
 public interface IUserController {
-    RootEntity<DtoUser> saveUser(DtoUserIU dtoUserIU);
     List<DtoUser> getAllUsers();
     RootEntity<DtoUser> getUserById(UUID id);
     void deleteUser(UUID id);
