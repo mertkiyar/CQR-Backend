@@ -3,6 +3,11 @@ package com.mrtkyr.classqroom.service.impl;
 import com.mrtkyr.classqroom.dto.DtoUser;
 import com.mrtkyr.classqroom.dto.iu.DtoRegisterRequestIU;
 import com.mrtkyr.classqroom.entity.Department;
+import com.mrtkyr.classqroom.entity.Student;
+import com.mrtkyr.classqroom.enums.UserType;
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import com.mrtkyr.classqroom.entity.User;
 import com.mrtkyr.classqroom.jwt.AuthRequest;
 import com.mrtkyr.classqroom.jwt.AuthResponse;
@@ -41,7 +46,22 @@ public class AuthServiceImpl implements IAuthService {
         Department department = departmentRepository.findById((short) request.getDepartmentId())
                 .orElseThrow(() -> new RuntimeException("Department not found"));
 
-        User user = new User();
+        User user;
+        if (request.getUserType() == UserType.STUDENT) {
+            Student student = new Student();
+            //todo replace this value with actual data
+            String generatedStudentNum = "0" + LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyMMddss"));
+            student.setStudentNumber(generatedStudentNum);
+            student.setYearOfStudy(1);
+            student.setGpa(BigDecimal.ZERO);
+            student.setCgpa(BigDecimal.ZERO);
+            student.setActive(true);
+            student.setInCampus(false);
+            user = student;
+        } else {
+            user = new User();
+        }
+
         user.setFirstName(request.getFirstName());
         user.setLastName(request.getLastName());
         user.setEmail(request.getEmail());
