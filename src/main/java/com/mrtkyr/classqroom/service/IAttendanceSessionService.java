@@ -13,4 +13,5 @@ public interface IAttendanceSessionService {
     void deleteAttendanceSession(UUID id);
     DtoAttendanceSession updateAttendanceSession(UUID id, DtoAttendanceSessionIU dtoAttendanceSessionIU);
     DtoAttendanceSession getCurrentSessionByAttendanceId(UUID attendanceId);
+    DtoAttendanceSession getCurrentSessionByNfcPath(UUID nfcPath);
 }

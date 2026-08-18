@@ -3,6 +3,8 @@ package com.mrtkyr.classqroom.service.impl;
 import com.mrtkyr.classqroom.dto.DtoAttendanceSession;
 import com.mrtkyr.classqroom.dto.iu.DtoAttendanceSessionIU;
 import com.mrtkyr.classqroom.entity.AttendanceSession;
+import com.mrtkyr.classqroom.entity.Attendance;
+import com.mrtkyr.classqroom.repository.AttendanceRepository;
 import com.mrtkyr.classqroom.enums.MessageType;
 import com.mrtkyr.classqroom.exception.BaseException;
 import com.mrtkyr.classqroom.exception.ErrorMessage;
@@ -22,6 +24,9 @@ public class AttendanceSessionServiceImpl implements IAttendanceSessionService {
 
     @Autowired
     private AttendanceSessionRepository attendanceSessionRepository;
+
+    @Autowired
+    private AttendanceRepository attendanceRepository;
 
     @Override
     public DtoAttendanceSession saveAttendanceSession(DtoAttendanceSessionIU dtoAttendanceSessionIU) {
@@ -90,5 +95,14 @@ public class AttendanceSessionServiceImpl implements IAttendanceSessionService {
         }
         BeanUtils.copyProperties(optSession.get(), dtoAttendanceSession);
         return dtoAttendanceSession;
+    }
+
+    @Override
+    public DtoAttendanceSession getCurrentSessionByNfcPath(UUID nfcPath) {
+        Optional<Attendance> optAttendance = attendanceRepository.findByNfcPath(nfcPath);
+        if (optAttendance.isEmpty()) {
+            throw new BaseException(new ErrorMessage(MessageType.NO_RECORD_EXIST, nfcPath.toString()));
+        }
+        return getCurrentSessionByAttendanceId(optAttendance.get().getAttendanceId());
     }
 }

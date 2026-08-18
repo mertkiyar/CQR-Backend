@@ -14,4 +14,5 @@ public interface IAttendanceSessionController {
     void deleteAttendanceSession(UUID id);
     RootEntity<DtoAttendanceSession> updateAttendanceSession(UUID id, DtoAttendanceSessionIU dtoAttendanceSessionIU);
     RootEntity<DtoAttendanceSession> getCurrentSessionByAttendanceId(UUID attendanceId);
+    RootEntity<DtoAttendanceSession> getCurrentSessionByNfcPath(UUID nfcPath);
 }

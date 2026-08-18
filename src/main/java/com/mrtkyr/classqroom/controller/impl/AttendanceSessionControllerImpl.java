@@ -54,4 +54,10 @@ public class AttendanceSessionControllerImpl extends RestBaseController implemen
     public RootEntity<DtoAttendanceSession> getCurrentSessionByAttendanceId(@PathVariable(name = "attendanceId") UUID attendanceId) {
         return ok(attendanceSessionService.getCurrentSessionByAttendanceId(attendanceId));
     }
+
+    @GetMapping("/get-nfc/{nfcPath}")
+    @Override
+    public RootEntity<DtoAttendanceSession> getCurrentSessionByNfcPath(@PathVariable(name = "nfcPath") UUID nfcPath) {
+        return ok(attendanceSessionService.getCurrentSessionByNfcPath(nfcPath));
+    }
 }
