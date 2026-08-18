@@ -60,4 +60,10 @@ public class AttendanceSessionControllerImpl extends RestBaseController implemen
     public RootEntity<DtoAttendanceSession> getCurrentSessionByNfcPath(@PathVariable(name = "nfcPath") UUID nfcPath) {
         return ok(attendanceSessionService.getCurrentSessionByNfcPath(nfcPath));
     }
+
+    @GetMapping("/get-code/{sixDigitCode}")
+    @Override
+    public RootEntity<DtoAttendanceSession> getCurrentSessionBySixDigitCode(@PathVariable(name = "sixDigitCode") String sixDigitCode) {
+        return ok(attendanceSessionService.getCurrentSessionBySixDigitCode(sixDigitCode));
+    }
 }

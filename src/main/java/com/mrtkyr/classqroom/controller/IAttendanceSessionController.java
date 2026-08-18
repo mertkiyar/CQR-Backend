@@ -15,4 +15,5 @@ public interface IAttendanceSessionController {
     RootEntity<DtoAttendanceSession> updateAttendanceSession(UUID id, DtoAttendanceSessionIU dtoAttendanceSessionIU);
     RootEntity<DtoAttendanceSession> getCurrentSessionByAttendanceId(UUID attendanceId);
     RootEntity<DtoAttendanceSession> getCurrentSessionByNfcPath(UUID nfcPath);
+    RootEntity<DtoAttendanceSession> getCurrentSessionBySixDigitCode(String sixDigitCode);
 }
