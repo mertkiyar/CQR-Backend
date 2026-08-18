@@ -14,4 +14,5 @@ public interface IAttendanceSessionService {
     DtoAttendanceSession updateAttendanceSession(UUID id, DtoAttendanceSessionIU dtoAttendanceSessionIU);
     DtoAttendanceSession getCurrentSessionByAttendanceId(UUID attendanceId);
     DtoAttendanceSession getCurrentSessionByNfcPath(UUID nfcPath);
+    DtoAttendanceSession getCurrentSessionBySixDigitCode(String sixDigitCode);
 }

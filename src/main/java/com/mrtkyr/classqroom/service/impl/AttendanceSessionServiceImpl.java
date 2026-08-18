@@ -105,4 +105,16 @@ public class AttendanceSessionServiceImpl implements IAttendanceSessionService {
         }
         return getCurrentSessionByAttendanceId(optAttendance.get().getAttendanceId());
     }
+
+    @Override
+    public DtoAttendanceSession getCurrentSessionBySixDigitCode(String sixDigitCode) {
+        DtoAttendanceSession dtoAttendanceSession = new DtoAttendanceSession();
+        Optional<AttendanceSession> optSession = attendanceSessionRepository
+                .findFirstBySixDigitCodeAndActiveTrueOrderByCreatedAtDesc(sixDigitCode);
+        if (optSession.isEmpty()) {
+            throw new BaseException(new ErrorMessage(MessageType.NO_ACTIVE_SESSION, sixDigitCode));
+        }
+        BeanUtils.copyProperties(optSession.get(), dtoAttendanceSession);
+        return dtoAttendanceSession;
+    }
 }

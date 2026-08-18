@@ -11,4 +11,5 @@ import java.util.UUID;
 public interface AttendanceSessionRepository extends JpaRepository<AttendanceSession, UUID> {
     List<AttendanceSession> findByAttendanceAndActiveTrue(Attendance attendance);
     Optional<AttendanceSession> findFirstByAttendance_AttendanceIdAndActiveTrueOrderByCreatedAtDesc(UUID attendanceId);
+    Optional<AttendanceSession> findFirstBySixDigitCodeAndActiveTrueOrderByCreatedAtDesc(String sixDigitCode);
 }
