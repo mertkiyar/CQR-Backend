@@ -15,9 +15,9 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
-public class QrSessionScheduler {
+public class SessionScheduler {
 
-    private static final Logger log = LoggerFactory.getLogger(QrSessionScheduler.class);
+    private static final Logger log = LoggerFactory.getLogger(SessionScheduler.class);
 
     @Autowired
     private AttendanceRepository attendanceRepository;
@@ -25,7 +25,7 @@ public class QrSessionScheduler {
     @Autowired
     private AttendanceSessionRepository attendanceSessionRepository;
 
-    @Scheduled(fixedDelay = 15000)
+    @Scheduled(fixedDelay = 30000)
     @Transactional
     public void rotateActiveSessions() {
         List<Attendance> activeAttendances = attendanceRepository.findAllByActiveTrue();
@@ -42,10 +42,14 @@ public class QrSessionScheduler {
             AttendanceSession newSession = new AttendanceSession();
             newSession.setAttendance(attendance);
             newSession.setActive(true);
-            newSession.setExpiresAt(LocalDateTime.now().plusSeconds(15));
+            newSession.setExpiresAt(LocalDateTime.now().plusSeconds(30));
+            
+            String randomCode = String.format("%06d", new java.util.Random().nextInt(1000000));
+            newSession.setSixDigitCode(randomCode);
+            
             attendanceSessionRepository.save(newSession);
 
-            log.info("New QR session created for attendanceId={}", attendance.getAttendanceId());
+            log.info("New QR/6-Digit session created for attendanceId={}", attendance.getAttendanceId());
         }
     }
 }
