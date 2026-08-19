@@ -1,4 +1,4 @@
-package com.mrtkyr.classqroom.service.impl;
+package com.mrtkyr.classqroom.scheduler;
 
 import com.mrtkyr.classqroom.entity.Attendance;
 import com.mrtkyr.classqroom.entity.AttendanceSession;
