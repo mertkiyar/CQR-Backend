@@ -31,6 +31,14 @@ public class AttendanceServiceImpl implements IAttendanceService {
 
     @Override
     public DtoAttendance saveAttendance(DtoAttendanceIU dtoAttendanceIU) {
+        // check if there is already an active attendance for this course
+        Optional<Attendance> activeAttendanceOpt = attendanceRepository.findByCourseAndActiveTrue(dtoAttendanceIU.getCourse());
+        if (activeAttendanceOpt.isPresent()) {
+            DtoAttendance dtoAttendance = new DtoAttendance();
+            BeanUtils.copyProperties(activeAttendanceOpt.get(), dtoAttendance);
+            return dtoAttendance;
+        }
+
         DtoAttendance dtoAttendance = new DtoAttendance();
         Attendance attendance = new Attendance();
         BeanUtils.copyProperties(dtoAttendanceIU, attendance);
