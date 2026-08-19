@@ -48,4 +48,14 @@ public class AttendanceRecordController extends RestBaseController implements IA
     public RootEntity<DtoAttendanceRecord> updateAttendanceRecord(@PathVariable(name = "id") UUID id, @RequestBody @Valid DtoAttendanceRecordIU dtoAttendanceRecordIU) {
         return ok(attendanceRecordService.updateAttendanceRecord(id, dtoAttendanceRecordIU));
     }
+
+    @GetMapping("/student/{studentId}")
+    public RootEntity<List<DtoAttendanceRecord>> getAttendanceRecordsByStudent(@PathVariable(name = "studentId") UUID studentId) {
+        return ok(attendanceRecordService.getAttendanceRecordsByStudent(studentId));
+    }
+
+    @GetMapping("/lecturer/{lecturerId}")
+    public RootEntity<List<DtoAttendanceRecord>> getAttendanceRecordsByLecturer(@PathVariable(name = "lecturerId") UUID lecturerId) {
+        return ok(attendanceRecordService.getAttendanceRecordsByLecturer(lecturerId));
+    }
 }

@@ -12,4 +12,6 @@ public interface IAttendanceRecordService {
     DtoAttendanceRecord getAttendanceRecordById(UUID id);
     void deleteAttendanceRecord(UUID id);
     DtoAttendanceRecord updateAttendanceRecord(UUID id, DtoAttendanceRecordIU dtoAttendanceRecordIU);
+    List<DtoAttendanceRecord> getAttendanceRecordsByStudent(UUID studentId);
+    List<DtoAttendanceRecord> getAttendanceRecordsByLecturer(UUID lecturerId);
 }

@@ -4,12 +4,14 @@ import com.mrtkyr.classqroom.dto.DtoAttendanceRecord;
 import com.mrtkyr.classqroom.dto.iu.DtoAttendanceRecordIU;
 import com.mrtkyr.classqroom.entity.AttendanceRecord;
 import com.mrtkyr.classqroom.entity.AttendanceSession;
+import com.mrtkyr.classqroom.entity.Course;
 import com.mrtkyr.classqroom.entity.Student;
 import com.mrtkyr.classqroom.enums.MessageType;
 import com.mrtkyr.classqroom.exception.BaseException;
 import com.mrtkyr.classqroom.exception.ErrorMessage;
 import com.mrtkyr.classqroom.repository.AttendanceRecordRepository;
 import com.mrtkyr.classqroom.repository.AttendanceSessionRepository;
+import com.mrtkyr.classqroom.repository.LecturerCourseRepository;
 import com.mrtkyr.classqroom.repository.StudentRepository;
 import com.mrtkyr.classqroom.service.IAttendanceRecordService;
 import org.springframework.beans.BeanUtils;
@@ -32,6 +34,9 @@ public class AttendanceRecordServiceImpl implements IAttendanceRecordService {
 
     @Autowired
     private AttendanceSessionRepository attendanceSessionRepository;
+
+    @Autowired
+    private LecturerCourseRepository lecturerCourseRepository;
 
     @Override
     public DtoAttendanceRecord saveAttendanceRecord(DtoAttendanceRecordIU dtoAttendanceRecordIU) {
@@ -102,5 +107,36 @@ public class AttendanceRecordServiceImpl implements IAttendanceRecordService {
         AttendanceRecord updated = attendanceRecordRepository.save(attendanceRecord);
         BeanUtils.copyProperties(updated, dtoAttendanceRecord);
         return dtoAttendanceRecord;
+    }
+
+    @Override
+    public List<DtoAttendanceRecord> getAttendanceRecordsByStudent(UUID studentId) {
+        List<AttendanceRecord> records = attendanceRecordRepository.findByStudent_UserIdOrderByAttendAtDesc(studentId);
+        List<DtoAttendanceRecord> dtoList = new ArrayList<>();
+        for (AttendanceRecord record : records) {
+            DtoAttendanceRecord dto = new DtoAttendanceRecord();
+            BeanUtils.copyProperties(record, dto);
+            dto.setStudent(record.getStudent());
+            dto.setAttendanceSession(record.getAttendanceSession());
+            dtoList.add(dto);
+        }
+        return dtoList;
+    }
+
+    @Override
+    public List<DtoAttendanceRecord> getAttendanceRecordsByLecturer(UUID lecturerId) {
+        List<Course> courses = lecturerCourseRepository.findActiveCoursesByLecturerId(lecturerId);
+        List<DtoAttendanceRecord> dtoList = new ArrayList<>();
+        if (courses == null || courses.isEmpty()) return dtoList;
+
+        List<AttendanceRecord> records = attendanceRecordRepository.findByAttendanceSession_Attendance_CourseInOrderByAttendAtDesc(courses);
+        for (AttendanceRecord record : records) {
+            DtoAttendanceRecord dto = new DtoAttendanceRecord();
+            BeanUtils.copyProperties(record, dto);
+            dto.setStudent(record.getStudent());
+            dto.setAttendanceSession(record.getAttendanceSession());
+            dtoList.add(dto);
+        }
+        return dtoList;
     }
 }
