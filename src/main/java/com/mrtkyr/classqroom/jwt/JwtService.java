@@ -32,7 +32,7 @@ public class JwtService {
                 .subject(userDetails.getUsername())
                 .claims(claimsMap)
                 .issuedAt(new Date())
-                .expiration(new Date(System.currentTimeMillis() + 1000*60*60*2)) // the token will be expired in 2 hours
+                .expiration(new Date(System.currentTimeMillis() + 1000*60*60*72)) // the token will be expired in 72 hours
                 .signWith(key)
                 .compact();
     }
