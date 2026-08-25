@@ -13,37 +13,37 @@ import java.util.List;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/rest/api/user")
+@RequestMapping("/users")
 public class UserControllerImpl extends RestBaseController implements IUserController {
 
     @Autowired
     private IUserService userService;
 
-    @GetMapping(path = "/list")
+    @GetMapping
     @Override
     public List<DtoUser> getAllUsers() {
         return userService.getAllUsers();
     }
 
-    @GetMapping(path = "/get/{id}")
+    @GetMapping("/{id}")
     @Override
     public RootEntity<DtoUser> getUserById(@PathVariable(name = "id") UUID id) {
         return ok(userService.getUserById(id));
     }
 
-    @DeleteMapping(path = "/delete/{id}")
+    @DeleteMapping("/{id}")
     @Override
     public void deleteUser(@PathVariable(name = "id") UUID id) {
         userService.deleteUser(id);
     }
 
-    @PutMapping(path = "/update/{id}")
+    @PutMapping("/{id}")
     @Override
     public RootEntity<DtoUser> updateUser(@PathVariable(name = "id") UUID id,@RequestBody @Valid DtoUserIU dtoUserIU) {
         return ok(userService.updateUser(id, dtoUserIU));
     }
 
-    @GetMapping(path = "/me")
+    @GetMapping("/me")
     @Override
     public RootEntity<DtoUser> getUserByToken(@RequestHeader("Authorization") String token) {
         if (token != null && token.startsWith("Bearer ")) {

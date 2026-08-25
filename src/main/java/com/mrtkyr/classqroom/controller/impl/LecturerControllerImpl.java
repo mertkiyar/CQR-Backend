@@ -13,37 +13,37 @@ import java.util.List;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/rest/api/lecturer")
+@RequestMapping("/lecturers")
 public class LecturerControllerImpl extends RestBaseController implements ILecturerController {
 
     @Autowired
     private ILecturerService lecturerService;
 
-    @PostMapping(path = "/save")
+    @PostMapping
     @Override
     public RootEntity<DtoLecturer> saveLecturer(@RequestBody @Valid DtoLecturerIU dtoLecturerIU) {
         return ok(lecturerService.saveLecturer(dtoLecturerIU));
     }
 
-    @GetMapping(path = "/list")
+    @GetMapping
     @Override
     public List<DtoLecturer> getAllLecturers() {
         return lecturerService.getAllLecturers();
     }
 
-    @GetMapping(path = "/get/{id}")
+    @GetMapping("/{id}")
     @Override
     public RootEntity<DtoLecturer> getLecturerById(@PathVariable(name = "id") UUID id) {
         return ok(lecturerService.getLecturerById(id));
     }
 
-    @DeleteMapping(path = "/delete/{id}")
+    @DeleteMapping("/{id}")
     @Override
     public void deleteLecturer(@PathVariable(name = "id") UUID id) {
         lecturerService.deleteLecturer(id);
     }
 
-    @PutMapping(path = "/update/{id}")
+    @PutMapping("/{id}")
     @Override
     public RootEntity<DtoLecturer> updateLecturer(@PathVariable(name = "id") UUID id, @RequestBody @Valid DtoLecturerIU dtoLecturerIU) {
         return ok(lecturerService.updateLecturer(id, dtoLecturerIU));

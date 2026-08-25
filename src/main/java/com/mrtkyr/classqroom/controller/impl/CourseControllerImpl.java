@@ -13,37 +13,37 @@ import java.util.List;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/rest/api/course")
+@RequestMapping("/courses")
 public class CourseControllerImpl extends RestBaseController implements ICourseController {
 
     @Autowired
     private ICourseService courseService;
 
-    @PostMapping(path = "/save")
+    @PostMapping
     @Override
     public RootEntity<DtoCourse> saveCourse(@RequestBody @Valid DtoCourseIU dtoCourseIU) {
         return ok(courseService.saveCourse(dtoCourseIU));
     }
 
-    @GetMapping(path = "/list")
+    @GetMapping
     @Override
     public List<DtoCourse> getAllCourses() {
         return courseService.getAllCourses();
     }
 
-    @GetMapping(path = "/get/{id}")
+    @GetMapping("/{id}")
     @Override
     public RootEntity<DtoCourse> getCourseById(@PathVariable(name = "id") UUID id) {
         return ok(courseService.getCourseById(id));
     }
 
-    @DeleteMapping(path = "/delete/{id}")
+    @DeleteMapping("/{id}")
     @Override
     public void deleteCourse(@PathVariable(name = "id") UUID id) {
         courseService.deleteCourse(id);
     }
 
-    @PutMapping(path = "/update/{id}")
+    @PutMapping("/{id}")
     @Override
     public RootEntity<DtoCourse> updateCouse(@PathVariable(name = "id") UUID id, @RequestBody @Valid DtoCourseIU dtoCourseIU) {
         return ok(courseService.updateCourse(id, dtoCourseIU));

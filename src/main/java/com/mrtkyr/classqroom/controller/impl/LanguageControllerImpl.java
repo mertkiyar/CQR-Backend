@@ -12,37 +12,37 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/rest/api/language")
+@RequestMapping("/languages")
 public class LanguageControllerImpl extends RestBaseController implements ILanguageController {
 
     @Autowired
     private ILanguageService languageService;
 
-    @PostMapping(path = "/save")
+    @PostMapping
     @Override
     public RootEntity<DtoLanguage> saveLanguage(@RequestBody @Valid DtoLanguageIU dtoLanguageIU) {
         return ok(languageService.saveLanguage(dtoLanguageIU));
     }
 
-    @GetMapping(path = "/list")
+    @GetMapping
     @Override
     public List<DtoLanguage> getAllLanguages() {
         return languageService.getAllLanguages();
     }
 
-    @GetMapping(path = "/get/{id}")
+    @GetMapping("/{id}")
     @Override
     public RootEntity<DtoLanguage> getLanguageById(@PathVariable(name = "id") Short id) {
         return ok(languageService.getLanguageById(id));
     }
 
-    @DeleteMapping(path = "/delete/{id}")
+    @DeleteMapping("/{id}")
     @Override
     public void deleteLanguage(@PathVariable(name = "id") Short id) {
         languageService.deleteLanguage(id);
     }
 
-    @PutMapping(path = "/update/{id}")
+    @PutMapping("/{id}")
     @Override
     public RootEntity<DtoLanguage> updateLanguage(@PathVariable(name = "id") Short id, @RequestBody @Valid DtoLanguageIU dtoLanguageIU) {
         return ok(languageService.updateLanguage(id, dtoLanguageIU));

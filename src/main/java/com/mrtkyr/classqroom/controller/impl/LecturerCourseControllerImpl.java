@@ -15,43 +15,43 @@ import java.util.List;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/rest/api/lecturerCourse")
+@RequestMapping("/lecturer-courses")
 public class LecturerCourseControllerImpl extends RestBaseController implements ILecturerCourseController {
 
     @Autowired
     private ILecturerCourseService lecturerCourseService;
 
-    @PostMapping("/save")
+    @PostMapping
     @Override
     public RootEntity<DtoLecturerCourse> saveLecturerCourse(@RequestBody @Valid DtoLecturerCourseIU dtoLecturerCourseIU) {
         return ok(lecturerCourseService.saveLecturerCourse(dtoLecturerCourseIU));
     }
 
-    @GetMapping("/list")
+    @GetMapping
     @Override
     public List<DtoLecturerCourse> getAllLecturerCourses() {
         return lecturerCourseService.getAllLecturerCourses();
     }
 
-    @GetMapping("/get/{id}")
+    @GetMapping("/{id}")
     @Override
     public RootEntity<DtoLecturerCourse> getLecturerCourseById(@PathVariable(name = "id") LecturerCourseId id) {
         return ok(lecturerCourseService.getLecturerCourseById(id));
     }
 
-    @DeleteMapping("/delete/{id}")
+    @DeleteMapping("/{id}")
     @Override
     public void deleteLecturerCourse(@PathVariable(name = "id") LecturerCourseId id) {
         lecturerCourseService.deleteLecturerCourse(id);
     }
 
-    @PutMapping("/update/{id}")
+    @PutMapping("/{id}")
     @Override
     public RootEntity<DtoLecturerCourse> updateLecturerCourse(@PathVariable(name = "id") LecturerCourseId id, @RequestBody @Valid DtoLecturerCourseIU dtoLecturerCourseIU) {
         return ok(lecturerCourseService.updateLecturerCourse(id, dtoLecturerCourseIU));
     }
 
-    @GetMapping("/lecturer/{id}/courses")
+    @GetMapping("/lecturers/{id}/courses")
     @Override
     public RootEntity<List<DtoCourse>> getActiveCoursesByLecturer(@PathVariable(name = "id") UUID lecturerId) {
         return ok(lecturerCourseService.getActiveCoursesByLecturer(lecturerId));

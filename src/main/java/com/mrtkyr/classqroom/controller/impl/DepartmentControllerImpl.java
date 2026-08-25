@@ -12,36 +12,36 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/rest/api/department")
+@RequestMapping("/departments")
 public class DepartmentControllerImpl extends RestBaseController implements IDepartmentController {
 
     @Autowired
     private IDepartmentService departmentService;
 
-    @PostMapping(path = "/save")
+    @PostMapping
     @Override
     public RootEntity<DtoDepartment> saveDepartment(@RequestBody @Valid DtoDepartmentIU dtoDepartmentIU) {
         return ok(departmentService.saveDepartment(dtoDepartmentIU));
     }
 
-    @GetMapping(path = "/list")
+    @GetMapping
     @Override
     public List<DtoDepartment> getAllDepartments() {
         return departmentService.getAllDepartments();
     }
 
-    @GetMapping(path = "/get/{id}")
+    @GetMapping("/{id}")
     @Override
     public RootEntity<DtoDepartment> getDepartmentById(@PathVariable(name = "id") Short id) {
         return ok(departmentService.getDepartmentById(id));
     }
 
-    @DeleteMapping(path = "/delete/{id}")
+    @DeleteMapping("/{id}")
     @Override
     public void deleteDepartment(@PathVariable(name = "id") Short id) {
     }
 
-    @PutMapping(path = "/update/{id}")
+    @PutMapping("/{id}")
     @Override
     public RootEntity<DtoDepartment> updateDepartment(@PathVariable(name = "id") Short id, @RequestBody @Valid DtoDepartmentIU dtoDepartmentIU) {
         return ok(departmentService.updateDepartment(id, dtoDepartmentIU));

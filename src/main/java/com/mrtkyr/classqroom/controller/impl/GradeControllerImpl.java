@@ -13,37 +13,37 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/rest/api/student/grade")
+@RequestMapping("/grades")
 public class GradeControllerImpl extends RestBaseController implements IGradeController {
 
     @Autowired
     private IGradeService gradeService;
 
-    @PostMapping("/save")
+    @PostMapping
     @Override
     public RootEntity<DtoGrade> saveGrade(@RequestBody @Valid DtoGradeIU dtoGradeIU) {
         return ok(gradeService.saveGrade(dtoGradeIU));
     }
 
-    @GetMapping("/list")
+    @GetMapping
     @Override
     public List<DtoGrade> getAllGrades() {
         return gradeService.getAllGrades();
     }
 
-    @GetMapping("/get/{id}")
+    @GetMapping("/{id}")
     @Override
     public RootEntity<DtoGrade> getGradeById(@PathVariable(name = "id") GradeId id) {
         return ok(gradeService.getGradeById(id));
     }
 
-    @DeleteMapping("/delete/{id}")
+    @DeleteMapping("/{id}")
     @Override
     public void deleteGrade(@PathVariable(name = "id") GradeId id) {
         gradeService.deleteGrade(id);
     }
 
-    @PutMapping("/update/{id}")
+    @PutMapping("/{id}")
     @Override
     public RootEntity<DtoGrade> updateGrade(@PathVariable(name = "id") GradeId id, @RequestBody @Valid DtoGradeIU dtoGradeIU) {
         return ok(gradeService.updateGrade(id, dtoGradeIU));

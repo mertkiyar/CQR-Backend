@@ -13,37 +13,37 @@ import java.util.List;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/rest/api/student")
+@RequestMapping("/students")
 public class StudentControllerImpl extends RestBaseController implements IStudentController {
 
     @Autowired
     private IStudentService studentService;
 
-    @PostMapping(path = "/save")
+    @PostMapping
     @Override
     public RootEntity<DtoStudent> saveStudent(@RequestBody @Valid DtoStudentIU dtoStudentIU) {
         return ok(studentService.saveStudent(dtoStudentIU));
     }
 
-    @GetMapping(path = "/list")
+    @GetMapping
     @Override
     public List<DtoStudent> getAllStudents() {
         return studentService.getAllStudents();
     }
 
-    @GetMapping(path = "/get/{id}")
+    @GetMapping("/{id}")
     @Override
     public RootEntity<DtoStudent> getStudentById(@PathVariable(name = "id") UUID id) {
         return ok(studentService.getStudentById(id));
     }
 
-    @DeleteMapping(path = "/delete/{id}")
+    @DeleteMapping("/{id}")
     @Override
     public void deleteStudent(@PathVariable(name = "id") UUID id) {
         studentService.deleteStudent(id);
     }
 
-    @PutMapping(path = "/update/{id}")
+    @PutMapping("/{id}")
     @Override
     public RootEntity<DtoStudent> updateStudent(@PathVariable(name = "id") UUID id, @RequestBody @Valid DtoStudentIU dtoStudentIU) {
         return ok(studentService.updateStudent(id, dtoStudentIU));

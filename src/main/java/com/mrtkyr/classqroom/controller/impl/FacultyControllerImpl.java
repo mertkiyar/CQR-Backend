@@ -12,37 +12,37 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/rest/api/faculty")
+@RequestMapping("/faculties")
 public class FacultyControllerImpl extends RestBaseController implements IFacultyController {
 
     @Autowired
     private IFacultyService facultyService;
 
-    @PostMapping(path = "/save")
+    @PostMapping
     @Override
     public RootEntity<DtoFaculty> saveFaculty(@RequestBody @Valid DtoFacultyIU dtoFacultyIU) {
         return ok(facultyService.saveFaculty(dtoFacultyIU));
     }
 
-    @GetMapping(path = "/list")
+    @GetMapping
     @Override
     public List<DtoFaculty> getAllFaculties() {
         return facultyService.getAllFaculties();
     }
 
-    @GetMapping(path = "/get/{id}")
+    @GetMapping("/{id}")
     @Override
     public RootEntity<DtoFaculty> getFacultyById(@PathVariable(name = "id") Short id) {
         return ok(facultyService.getFacultyById(id));
     }
 
-    @DeleteMapping(path = "/delete/{id}")
+    @DeleteMapping("/{id}")
     @Override
     public void deleteFaculty(@PathVariable(name = "id") Short id) {
         facultyService.deleteFaculty(id);
     }
 
-    @PutMapping(path = "/update/{id}")
+    @PutMapping("/{id}")
     @Override
     public RootEntity<DtoFaculty> updateFaculty(@PathVariable(name = "id") Short id, @RequestBody @Valid DtoFacultyIU dtoFacultyIU) {
         return ok(facultyService.updateFaculty(id, dtoFacultyIU));

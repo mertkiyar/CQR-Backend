@@ -13,37 +13,37 @@ import java.util.List;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/rest/api/attendance/session")
+@RequestMapping("/attendance-sessions")
 public class AttendanceSessionControllerImpl extends RestBaseController implements IAttendanceSessionController {
 
     @Autowired
     private IAttendanceSessionService attendanceSessionService;
 
-    @PostMapping("/save")
+    @PostMapping
     @Override
     public RootEntity<DtoAttendanceSession> saveAttendanceSession(@RequestBody @Valid DtoAttendanceSessionIU dtoAttendanceSessionIU) {
         return ok(attendanceSessionService.saveAttendanceSession(dtoAttendanceSessionIU));
     }
 
-    @GetMapping("/list")
+    @GetMapping
     @Override
     public List<DtoAttendanceSession> getAllAttendanceSessions() {
         return attendanceSessionService.getAllAttendanceSessions();
     }
 
-    @GetMapping("/get/{id}")
+    @GetMapping("/{id}")
     @Override
     public RootEntity<DtoAttendanceSession> getAttendanceSessionById(@PathVariable(name = "id") UUID id) {
         return ok(attendanceSessionService.getAttendanceSessionById(id));
     }
 
-    @DeleteMapping("/delete/{id}")
+    @DeleteMapping("/{id}")
     @Override
     public void deleteAttendanceSession(@PathVariable(name = "id") UUID id) {
         attendanceSessionService.deleteAttendanceSession(id);
     }
 
-    @PutMapping("/update/{id}")
+    @PutMapping("/{id}")
     @Override
     public RootEntity<DtoAttendanceSession> updateAttendanceSession(@PathVariable(name = "id") UUID id, @RequestBody @Valid DtoAttendanceSessionIU dtoAttendanceSessionIU) {
         return ok(attendanceSessionService.updateAttendanceSession(id, dtoAttendanceSessionIU));
@@ -55,13 +55,13 @@ public class AttendanceSessionControllerImpl extends RestBaseController implemen
         return ok(attendanceSessionService.getCurrentSessionByAttendanceId(attendanceId));
     }
 
-    @GetMapping("/get-nfc/{nfcPath}")
+    @GetMapping("/nfc/{nfcPath}")
     @Override
     public RootEntity<DtoAttendanceSession> getCurrentSessionByNfcPath(@PathVariable(name = "nfcPath") UUID nfcPath) {
         return ok(attendanceSessionService.getCurrentSessionByNfcPath(nfcPath));
     }
 
-    @GetMapping("/get-code/{sixDigitCode}")
+    @GetMapping("/code/{sixDigitCode}")
     @Override
     public RootEntity<DtoAttendanceSession> getCurrentSessionBySixDigitCode(@PathVariable(name = "sixDigitCode") String sixDigitCode) {
         return ok(attendanceSessionService.getCurrentSessionBySixDigitCode(sixDigitCode));

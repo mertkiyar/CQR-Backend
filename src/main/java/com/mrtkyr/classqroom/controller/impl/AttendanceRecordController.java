@@ -13,48 +13,48 @@ import java.util.List;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/rest/api/attendance/record")
+@RequestMapping("/attendance-records")
 public class AttendanceRecordController extends RestBaseController implements IAttendanceRecordController {
 
     @Autowired
     private IAttendanceRecordService attendanceRecordService;
 
-    @PostMapping("/save")
+    @PostMapping
     @Override
     public RootEntity<DtoAttendanceRecord> saveAttendanceRecord(@RequestBody @Valid DtoAttendanceRecordIU dtoAttendanceRecordIU) {
         return ok(attendanceRecordService.saveAttendanceRecord(dtoAttendanceRecordIU));
     }
 
-    @GetMapping("/list")
+    @GetMapping
     @Override
     public List<DtoAttendanceRecord> getAllAttendanceRecords() {
         return attendanceRecordService.getAllAttendanceRecords();
     }
 
-    @GetMapping("/get/{id}")
+    @GetMapping("/{id}")
     @Override
     public RootEntity<DtoAttendanceRecord> getAttendanceRecordById(@PathVariable(name = "id") UUID id) {
         return ok(attendanceRecordService.getAttendanceRecordById(id));
     }
 
-    @DeleteMapping("/delete/{id}")
+    @DeleteMapping("/{id}")
     @Override
     public void deleteAttendanceRecord(@PathVariable(name = "id") UUID id) {
         attendanceRecordService.deleteAttendanceRecord(id);
     }
 
-    @PutMapping("/update/{id}")
+    @PutMapping("/{id}")
     @Override
     public RootEntity<DtoAttendanceRecord> updateAttendanceRecord(@PathVariable(name = "id") UUID id, @RequestBody @Valid DtoAttendanceRecordIU dtoAttendanceRecordIU) {
         return ok(attendanceRecordService.updateAttendanceRecord(id, dtoAttendanceRecordIU));
     }
 
-    @GetMapping("/student/{studentId}")
+    @GetMapping("/students/{studentId}")
     public RootEntity<List<DtoAttendanceRecord>> getAttendanceRecordsByStudent(@PathVariable(name = "studentId") UUID studentId) {
         return ok(attendanceRecordService.getAttendanceRecordsByStudent(studentId));
     }
 
-    @GetMapping("/lecturer/{lecturerId}")
+    @GetMapping("/lecturers/{lecturerId}")
     public RootEntity<List<DtoAttendanceRecord>> getAttendanceRecordsByLecturer(@PathVariable(name = "lecturerId") UUID lecturerId) {
         return ok(attendanceRecordService.getAttendanceRecordsByLecturer(lecturerId));
     }

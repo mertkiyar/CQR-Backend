@@ -13,37 +13,37 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/rest/api/student/course")
+@RequestMapping("/student-courses")
 public class StudentCourseControllerImpl extends RestBaseController implements IStudentCourseController {
 
     @Autowired
     private IStudentCourseService studentCourseService;
 
-    @PostMapping(path = "/save")
+    @PostMapping
     @Override
     public RootEntity<DtoStudentCourse> saveStudentCourse(@RequestBody @Valid DtoStudentCourseIU dtoStudentCourseIU) {
         return ok(studentCourseService.saveStudentCourse(dtoStudentCourseIU));
     }
 
-    @GetMapping(path = "/list")
+    @GetMapping
     @Override
     public List<DtoStudentCourse> getAllStudentCourses() {
         return studentCourseService.getAllStudentCourses();
     }
 
-    @GetMapping(path = "/get/{id}")
+    @GetMapping("/{id}")
     @Override
     public RootEntity<DtoStudentCourse> getStudentCourseById(@PathVariable(name = "id") StudentCourseId id) {
         return ok(studentCourseService.getStudentCourseById(id));
     }
 
-    @DeleteMapping(path = "/delete/{id}")
+    @DeleteMapping("/{id}")
     @Override
     public void deleteStudentCourse(@PathVariable(name = "id") StudentCourseId id) {
         studentCourseService.deleteStudentCourse(id);
     }
 
-    @PutMapping(path = "/update/{id}")
+    @PutMapping("/{id}")
     @Override
     public RootEntity<DtoStudentCourse> updateStudentCourse(@PathVariable(name = "id") StudentCourseId id, @RequestBody @Valid DtoStudentCourseIU dtoStudentCourseIU) {
         return ok(studentCourseService.updateStudentCourse(id, dtoStudentCourseIU));
