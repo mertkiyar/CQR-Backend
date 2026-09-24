@@ -3,6 +3,8 @@ package com.mrtkyr.classqroom.dto.iu;
 import com.mrtkyr.classqroom.enums.GenderType;
 import com.mrtkyr.classqroom.enums.UserType;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.Max;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -32,5 +34,7 @@ public class DtoRegisterRequestIU {
     private UserType userType;
 
     @NotNull(message = "Department cannot be null!")
-    private int departmentId;
+    @Min(value = 1, message = "Department ID must be positive!")
+    @Max(value = Short.MAX_VALUE, message = "Department ID is too large!")
+    private Integer departmentId;
 }

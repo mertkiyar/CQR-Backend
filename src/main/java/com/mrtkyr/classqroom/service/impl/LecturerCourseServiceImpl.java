@@ -10,10 +10,13 @@ import com.mrtkyr.classqroom.enums.MessageType;
 import com.mrtkyr.classqroom.exception.BaseException;
 import com.mrtkyr.classqroom.exception.ErrorMessage;
 import com.mrtkyr.classqroom.repository.LecturerCourseRepository;
+import com.mrtkyr.classqroom.repository.LecturerRepository;
+import com.mrtkyr.classqroom.repository.CourseRepository;
 import com.mrtkyr.classqroom.service.ILecturerCourseService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,11 +29,38 @@ public class LecturerCourseServiceImpl implements ILecturerCourseService {
     @Autowired
     private LecturerCourseRepository lecturerCourseRepository;
 
+    @Autowired
+    private LecturerRepository lecturerRepository;
+
+    @Autowired
+    private CourseRepository courseRepository;
+
     @Override
+    @Transactional
     public DtoLecturerCourse saveLecturerCourse(DtoLecturerCourseIU dtoLecturerCourseIU) {
-        LecturerCourse lecturerCourse = new LecturerCourse();
+        if (dtoLecturerCourseIU.getLecturer() == null || dtoLecturerCourseIU.getCourse() == null) {
+            throw new BaseException(new ErrorMessage(MessageType.MISSING_REQUIRED_FIELD, "Lecturer and course are required"));
+        }
+        UUID lecturerId = dtoLecturerCourseIU.getLecturer().getUserId();
+        UUID courseId = dtoLecturerCourseIU.getCourse().getCourseId();
+        if (lecturerId == null || courseId == null) {
+            throw new BaseException(new ErrorMessage(MessageType.INVALID_ID, "Lecturer and course IDs are required"));
+        }
+
+        var lecturer = lecturerRepository.findById(lecturerId)
+                .orElseThrow(() -> new BaseException(new ErrorMessage(MessageType.NO_RECORD_EXIST,
+                        "Lecturer profile " + lecturerId)));
+        var course = courseRepository.findById(courseId)
+                .orElseThrow(() -> new BaseException(new ErrorMessage(MessageType.NO_RECORD_EXIST,
+                        "Course " + courseId)));
+
+        LecturerCourseId id = new LecturerCourseId(lecturerId, courseId);
+        LecturerCourse lecturerCourse = lecturerCourseRepository.findById(id).orElseGet(LecturerCourse::new);
+        lecturerCourse.setId(id);
+        lecturerCourse.setLecturer(lecturer);
+        lecturerCourse.setCourse(course);
+        lecturerCourse.setActive(dtoLecturerCourseIU.isActive());
         DtoLecturerCourse dtoLecturerCourse = new DtoLecturerCourse();
-        BeanUtils.copyProperties(dtoLecturerCourseIU, lecturerCourse);
         lecturerCourse = lecturerCourseRepository.save(lecturerCourse);
         BeanUtils.copyProperties(lecturerCourse, dtoLecturerCourse);
         return dtoLecturerCourse;

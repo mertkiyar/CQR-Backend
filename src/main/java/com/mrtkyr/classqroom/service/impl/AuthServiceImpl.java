@@ -3,7 +3,10 @@ package com.mrtkyr.classqroom.service.impl;
 import com.mrtkyr.classqroom.dto.DtoUser;
 import com.mrtkyr.classqroom.dto.iu.DtoRegisterRequestIU;
 import com.mrtkyr.classqroom.entity.Department;
+import com.mrtkyr.classqroom.entity.Lecturer;
 import com.mrtkyr.classqroom.entity.Student;
+import com.mrtkyr.classqroom.enums.AcademicRole;
+import com.mrtkyr.classqroom.enums.AcademicTitle;
 import com.mrtkyr.classqroom.enums.MessageType;
 import com.mrtkyr.classqroom.enums.UserType;
 import java.math.BigDecimal;
@@ -21,9 +24,11 @@ import com.mrtkyr.classqroom.service.IAuthService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class AuthServiceImpl implements IAuthService {
@@ -44,6 +49,7 @@ public class AuthServiceImpl implements IAuthService {
     private JwtService jwtService;
 
     @Override
+    @Transactional
     public DtoUser register(DtoRegisterRequestIU request) {
         DtoUser dtoUser = new DtoUser();
         
@@ -53,8 +59,9 @@ public class AuthServiceImpl implements IAuthService {
             );
         }
 
-        Department department = departmentRepository.findById((short) request.getDepartmentId())
-                .orElseThrow(() -> new RuntimeException("Department not found"));
+        Department department = departmentRepository.findById(request.getDepartmentId().shortValue())
+                .orElseThrow(() -> new BaseException(
+                        new ErrorMessage(MessageType.NO_RECORD_EXIST, "Department " + request.getDepartmentId())));
 
         User user;
         if (request.getUserType() == UserType.STUDENT) {
@@ -68,6 +75,11 @@ public class AuthServiceImpl implements IAuthService {
             student.setActive(true);
             student.setInCampus(false);
             user = student;
+        } else if (request.getUserType() == UserType.LECTURER) {
+            Lecturer lecturer = new Lecturer();
+            lecturer.setLecturerTitle(AcademicTitle.LECTURER);
+            lecturer.setLecturerRole(AcademicRole.LECTURER);
+            user = lecturer;
         } else {
             user = new User();
         }
@@ -90,7 +102,8 @@ public class AuthServiceImpl implements IAuthService {
     @Override
     public AuthResponse authenticate(AuthRequest request) {
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword())); //verify user
-        User user = userRepository.findUserByEmail(request.getEmail()).orElseThrow();
+        User user = userRepository.findUserByEmail(request.getEmail())
+                .orElseThrow(() -> new BadCredentialsException("User not found after authentication"));
         String token = jwtService.generateToken(user);
         return new AuthResponse(token);
     }

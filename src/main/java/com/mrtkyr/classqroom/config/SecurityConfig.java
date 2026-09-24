@@ -1,7 +1,12 @@
 package com.mrtkyr.classqroom.config;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.mrtkyr.classqroom.entity.RootEntity;
+import com.mrtkyr.classqroom.enums.MessageType;
 import com.mrtkyr.classqroom.jwt.JwtAuthenticationFilter;
 import com.mrtkyr.classqroom.jwt.JwtService;
+import jakarta.servlet.DispatcherType;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -27,6 +32,9 @@ public class SecurityConfig {
 
     private JwtAuthenticationFilter authenticationFilter;
 
+    @Autowired
+    private ObjectMapper objectMapper;
+
     public SecurityConfig(AuthenticationProvider authenticationProvider, JwtService jwtService, UserDetailsService userDetailsService) {
         this.authenticationProvider = authenticationProvider;
         this.authenticationFilter = new JwtAuthenticationFilter(jwtService, userDetailsService);
@@ -35,12 +43,27 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) {
         http.csrf(AbstractHttpConfigurer::disable).authorizeHttpRequests(request -> request
+                .dispatcherTypeMatchers(DispatcherType.ERROR).permitAll()
                 .requestMatchers(AUTHENTICATE, REGISTER, SWAGGER_UI, API_DOCS)
                 .permitAll()
                 .anyRequest().authenticated())
+                .exceptionHandling(exceptions -> exceptions
+                        .authenticationEntryPoint((request, response, exception) -> {
+                            boolean hasToken = request.getHeader("Authorization") != null;
+                            MessageType type = hasToken ? MessageType.INVALID_TOKEN : MessageType.UNAUTHORIZED;
+                            writeError(response, HttpServletResponse.SC_UNAUTHORIZED, type);
+                        })
+                        .accessDeniedHandler((request, response, exception) ->
+                                writeError(response, HttpServletResponse.SC_FORBIDDEN, MessageType.FORBIDDEN)))
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authenticationProvider(authenticationProvider)
                 .addFilterBefore(authenticationFilter, UsernamePasswordAuthenticationFilter.class);
         return http.build();
+    }
+
+    private void writeError(HttpServletResponse response, int status, MessageType type) throws java.io.IOException {
+        response.setStatus(status);
+        response.setContentType("application/json;charset=UTF-8");
+        objectMapper.writeValue(response.getOutputStream(), RootEntity.error(type.getCode(), type.getMessage()));
     }
 }

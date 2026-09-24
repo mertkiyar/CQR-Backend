@@ -37,9 +37,10 @@ class CqrBackendApplicationTests {
     }
 
     @Test
-    public void shouldReturn403WhenAccessingProtectedResourceWithoutToken() throws Exception {
+    public void shouldReturn401WhenAccessingProtectedResourceWithoutToken() throws Exception {
         mockMvc.perform(get("/rest/api/faculty/list"))
-                .andExpect(status().isForbidden());
+                .andExpect(status().isUnauthorized())
+                .andExpect(jsonPath("$.errorCode").value("3001"));
     }
 
     @Test
