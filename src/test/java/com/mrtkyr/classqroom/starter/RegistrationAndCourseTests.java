@@ -1,8 +1,9 @@
 package com.mrtkyr.classqroom.starter;
 
 import com.mrtkyr.classqroom.dto.iu.DtoLecturerCourseIU;
+import com.mrtkyr.classqroom.dto.iu.DtoCourseIdReference;
+import com.mrtkyr.classqroom.dto.iu.DtoUserIdReference;
 import com.mrtkyr.classqroom.dto.iu.DtoRegisterRequestIU;
-import com.mrtkyr.classqroom.entity.Course;
 import com.mrtkyr.classqroom.entity.Department;
 import com.mrtkyr.classqroom.entity.Lecturer;
 import com.mrtkyr.classqroom.entity.User;
@@ -59,14 +60,12 @@ class RegistrationAndCourseTests {
         ReflectionTestUtils.setField(service, "lecturerRepository", lecturers);
         ReflectionTestUtils.setField(service, "courseRepository", courses);
         UUID lecturerId = UUID.randomUUID();
-        Lecturer lecturer = new Lecturer();
-        lecturer.setUserId(lecturerId);
-        Course course = new Course();
-        course.setCourseId(UUID.randomUUID());
+        UUID courseId = UUID.randomUUID();
         when(lecturers.findById(lecturerId)).thenReturn(Optional.empty());
 
         BaseException error = assertThrows(BaseException.class,
-                () -> service.saveLecturerCourse(new DtoLecturerCourseIU(lecturer, course, true)));
+                () -> service.saveLecturerCourse(new DtoLecturerCourseIU(
+                        new DtoUserIdReference(lecturerId), new DtoCourseIdReference(courseId), true)));
 
         assertEquals("1001", error.getMessageType().getCode());
     }

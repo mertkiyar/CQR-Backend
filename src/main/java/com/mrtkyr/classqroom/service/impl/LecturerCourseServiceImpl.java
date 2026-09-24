@@ -59,7 +59,7 @@ public class LecturerCourseServiceImpl implements ILecturerCourseService {
         lecturerCourse.setId(id);
         lecturerCourse.setLecturer(lecturer);
         lecturerCourse.setCourse(course);
-        lecturerCourse.setActive(dtoLecturerCourseIU.isActive());
+        lecturerCourse.setActive(dtoLecturerCourseIU.getActive());
         DtoLecturerCourse dtoLecturerCourse = new DtoLecturerCourse();
         lecturerCourse = lecturerCourseRepository.save(lecturerCourse);
         BeanUtils.copyProperties(lecturerCourse, dtoLecturerCourse);
@@ -101,14 +101,19 @@ public class LecturerCourseServiceImpl implements ILecturerCourseService {
     }
 
     @Override
+    @Transactional
     public DtoLecturerCourse updateLecturerCourse(LecturerCourseId id, DtoLecturerCourseIU dtoLecturerCourseIU) {
+        if (dtoLecturerCourseIU.getLecturer() == null || dtoLecturerCourseIU.getCourse() == null
+                || !id.getLecturerId().equals(dtoLecturerCourseIU.getLecturer().getUserId())
+                || !id.getCourseId().equals(dtoLecturerCourseIU.getCourse().getCourseId())) {
+            throw new BaseException(new ErrorMessage(MessageType.INVALID_ID,
+                    "Association IDs must match the path"));
+        }
         DtoLecturerCourse dtoLecturerCourse = new DtoLecturerCourse();
         Optional<LecturerCourse> optLecturerCourse = lecturerCourseRepository.findById(id);
         if (optLecturerCourse.isPresent()) {
             LecturerCourse lecturerCourse = optLecturerCourse.get();
-            lecturerCourse.setLecturer(dtoLecturerCourseIU.getLecturer());
-            lecturerCourse.setCourse(dtoLecturerCourseIU.getCourse());
-            lecturerCourse.setActive(dtoLecturerCourseIU.isActive());
+            lecturerCourse.setActive(dtoLecturerCourseIU.getActive());
             LecturerCourse updatedLecturerCourse = lecturerCourseRepository.save(lecturerCourse);
             BeanUtils.copyProperties(updatedLecturerCourse, dtoLecturerCourse);
             return dtoLecturerCourse;

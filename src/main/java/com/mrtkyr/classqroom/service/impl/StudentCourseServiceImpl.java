@@ -56,7 +56,7 @@ public class StudentCourseServiceImpl implements IStudentCourseService {
         studentCourse.setId(id);
         studentCourse.setStudent(student);
         studentCourse.setCourse(course);
-        studentCourse.setActive(dtoStudentCourseIU.isActive());
+        studentCourse.setActive(dtoStudentCourseIU.getActive());
         DtoStudentCourse dtoStudentCourse = new DtoStudentCourse();
         studentCourse = studentCourseRepository.save(studentCourse);
         BeanUtils.copyProperties(studentCourse, dtoStudentCourse);
@@ -98,14 +98,19 @@ public class StudentCourseServiceImpl implements IStudentCourseService {
     }
 
     @Override
+    @Transactional
     public DtoStudentCourse updateStudentCourse(StudentCourseId id, DtoStudentCourseIU dtoStudentCourseIU) {
+        if (dtoStudentCourseIU.getStudent() == null || dtoStudentCourseIU.getCourse() == null
+                || !id.getStudentId().equals(dtoStudentCourseIU.getStudent().getUserId())
+                || !id.getCourseId().equals(dtoStudentCourseIU.getCourse().getCourseId())) {
+            throw new BaseException(new ErrorMessage(MessageType.INVALID_ID,
+                    "Association IDs must match the path"));
+        }
         DtoStudentCourse dtoStudentCourse = new DtoStudentCourse();
         Optional<StudentCourse> optStudentCourse = studentCourseRepository.findById(id);
         if(optStudentCourse.isPresent()) {
             StudentCourse studentCourse = optStudentCourse.get();
-            studentCourse.setStudent(dtoStudentCourseIU.getStudent());
-            studentCourse.setCourse(dtoStudentCourseIU.getCourse());
-            studentCourse.setActive(dtoStudentCourseIU.isActive());
+            studentCourse.setActive(dtoStudentCourseIU.getActive());
             StudentCourse updatedStudentCourse = studentCourseRepository.save(studentCourse);
             BeanUtils.copyProperties(updatedStudentCourse, dtoStudentCourse);
             return dtoStudentCourse;
