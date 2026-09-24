@@ -1,6 +1,5 @@
 package com.mrtkyr.classqroom.config;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mrtkyr.classqroom.entity.RootEntity;
 import com.mrtkyr.classqroom.enums.MessageType;
 import com.mrtkyr.classqroom.jwt.JwtAuthenticationFilter;
@@ -18,6 +17,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import tools.jackson.databind.json.JsonMapper;
 
 @Configuration
 @EnableWebSecurity
@@ -33,7 +33,7 @@ public class SecurityConfig {
     private JwtAuthenticationFilter authenticationFilter;
 
     @Autowired
-    private ObjectMapper objectMapper;
+    private JsonMapper jsonMapper;
 
     public SecurityConfig(AuthenticationProvider authenticationProvider, JwtService jwtService, UserDetailsService userDetailsService) {
         this.authenticationProvider = authenticationProvider;
@@ -64,6 +64,6 @@ public class SecurityConfig {
     private void writeError(HttpServletResponse response, int status, MessageType type) throws java.io.IOException {
         response.setStatus(status);
         response.setContentType("application/json;charset=UTF-8");
-        objectMapper.writeValue(response.getOutputStream(), RootEntity.error(type.getCode(), type.getMessage()));
+        jsonMapper.writeValue(response.getOutputStream(), RootEntity.error(type.getCode(), type.getMessage()));
     }
 }
