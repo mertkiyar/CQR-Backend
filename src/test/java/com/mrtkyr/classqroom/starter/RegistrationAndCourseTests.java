@@ -1,5 +1,6 @@
 package com.mrtkyr.classqroom.starter;
 
+import com.mrtkyr.classqroom.dto.DtoUser;
 import com.mrtkyr.classqroom.dto.iu.DtoLecturerCourseIU;
 import com.mrtkyr.classqroom.dto.iu.DtoCourseIdReference;
 import com.mrtkyr.classqroom.dto.iu.DtoUserIdReference;
@@ -19,11 +20,15 @@ import com.mrtkyr.classqroom.service.impl.LecturerCourseServiceImpl;
 import org.junit.jupiter.api.Test;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.test.util.ReflectionTestUtils;
+import tools.jackson.databind.json.JsonMapper;
 
+import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
@@ -60,13 +65,22 @@ class RegistrationAndCourseTests {
         ReflectionTestUtils.setField(service, "departmentRepository", departments);
         ReflectionTestUtils.setField(service, "passwordEncoder", encoder);
         when(users.findUserByEmail("ece@example.com")).thenReturn(Optional.empty());
-        when(departments.findById((short) 1)).thenReturn(Optional.of(new Department()));
-        when(users.save(any(User.class))).thenAnswer(invocation -> invocation.getArgument(0));
+        Department department = new Department();
+        department.setId((short) 1);
+        when(departments.findById((short) 1)).thenReturn(Optional.of(department));
+        when(users.saveAndFlush(any(User.class))).thenAnswer(invocation -> {
+            User saved = invocation.getArgument(0);
+            saved.setCreatedAt(LocalDateTime.now());
+            return saved;
+        });
 
-        service.register(new DtoRegisterRequestIU("Ece", "Demir", "ece@example.com", "test-password",
+        DtoUser response = service.register(new DtoRegisterRequestIU("Ece", "Demir", "ece@example.com", "test-password",
                 GenderType.FEMALE, UserType.LECTURER, 1));
 
-        verify(users).save(org.mockito.ArgumentMatchers.argThat(user ->
+        assertEquals(1, response.getDepartmentId());
+        assertNotNull(response.getCreatedAt());
+        assertFalse(JsonMapper.builder().build().writeValueAsString(response).contains("password"));
+        verify(users).saveAndFlush(org.mockito.ArgumentMatchers.argThat(user ->
                 user instanceof Lecturer lecturer && lecturer.getLecturerTitle() != null
                         && lecturer.getLecturerRole() != null));
     }

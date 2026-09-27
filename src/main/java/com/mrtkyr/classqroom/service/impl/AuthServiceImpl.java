@@ -21,7 +21,6 @@ import com.mrtkyr.classqroom.jwt.JwtService;
 import com.mrtkyr.classqroom.repository.DepartmentRepository;
 import com.mrtkyr.classqroom.repository.UserRepository;
 import com.mrtkyr.classqroom.service.IAuthService;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -51,7 +50,6 @@ public class AuthServiceImpl implements IAuthService {
     @Override
     @Transactional
     public DtoUser register(DtoRegisterRequestIU request) {
-        DtoUser dtoUser = new DtoUser();
         if (request.getUserType() != UserType.STUDENT && request.getUserType() != UserType.LECTURER) {
             throw new BaseException(new ErrorMessage(MessageType.FORBIDDEN, "Only student and lecturer registration is allowed"));
         }
@@ -96,10 +94,8 @@ public class AuthServiceImpl implements IAuthService {
         user.setDepartment(department);
         user.setInCourse(false); // default value
 
-        User savedUser = userRepository.save(user);
-        BeanUtils.copyProperties(savedUser, dtoUser);
-
-        return dtoUser;
+        User savedUser = userRepository.saveAndFlush(user);
+        return DtoUser.from(savedUser);
     }
 
     @Override

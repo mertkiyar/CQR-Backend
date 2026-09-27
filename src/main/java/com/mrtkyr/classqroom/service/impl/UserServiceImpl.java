@@ -6,7 +6,6 @@ import com.mrtkyr.classqroom.entity.User;
 import com.mrtkyr.classqroom.jwt.JwtService;
 import com.mrtkyr.classqroom.repository.UserRepository;
 import com.mrtkyr.classqroom.service.IUserService;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -26,21 +25,16 @@ public class UserServiceImpl implements IUserService {
     @Override
     public List<DtoUser> getAllUsers() {
         List<DtoUser> dtoUserList = new ArrayList<>();
-        List<User> userList = userRepository.findAll();
-        for (User user : userList) {
-            DtoUser dtoUser = new DtoUser();
-            BeanUtils.copyProperties(user, dtoUser);
-            dtoUserList.add(dtoUser);
+        for (User user : userRepository.findAll()) {
+            dtoUserList.add(DtoUser.from(user));
         }
         return dtoUserList;
     }
 
     @Override
     public DtoUser getUserById(UUID id) {
-        DtoUser dtoUser = new DtoUser();
         Optional<User> optUser = userRepository.findById(id);
-        optUser.ifPresent(user -> BeanUtils.copyProperties(user, dtoUser));
-        return dtoUser;
+        return optUser.map(DtoUser::from).orElseGet(DtoUser::new);
     }
 
     @Override
@@ -51,14 +45,12 @@ public class UserServiceImpl implements IUserService {
 
     @Override
     public DtoUser updateUser(UUID id, DtoUserIU dtoUserIU) {
-        DtoUser dtoUser = new DtoUser();
         Optional<User> optUser = userRepository.findById(id);
         if (optUser.isPresent()) {
             User user = optUser.get();
             user.setUserType(dtoUserIU.getUserType());
             User updatedUser = userRepository.save(user);
-            BeanUtils.copyProperties(updatedUser, dtoUser);
-            return dtoUser;
+            return DtoUser.from(updatedUser);
         }
         return null;
     }
@@ -66,9 +58,7 @@ public class UserServiceImpl implements IUserService {
     @Override
     public DtoUser getUserByToken(String token) {
         String username = jwtService.getUsernameByToken(token);
-        DtoUser dtoUser = new DtoUser();
         Optional<User> optUser = userRepository.findUserByEmail(username);
-        optUser.ifPresent(user -> BeanUtils.copyProperties(user, dtoUser));
-        return dtoUser;
+        return optUser.map(DtoUser::from).orElseGet(DtoUser::new);
     }
 }
