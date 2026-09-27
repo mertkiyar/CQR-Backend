@@ -95,10 +95,17 @@ public class AttendanceServiceImpl implements IAttendanceService {
             throw new BaseException(new ErrorMessage(MessageType.NO_RECORD_EXIST, id.toString()));
         }
         Attendance attendance = optAttendance.get();
+        if (!attendance.getCourse().getCourseId().equals(dtoAttendanceIU.getCourse().getCourseId())) {
+            throw new BaseException(new ErrorMessage(MessageType.INVALID_ID, "Attendance course cannot be changed"));
+        }
         attendance.setNfcPath(dtoAttendanceIU.getNfcPath());
+        attendance.setLatitude(dtoAttendanceIU.getLatitude());
+        attendance.setLongitude(dtoAttendanceIU.getLongitude());
         attendance.setAllowedRadiusMeters(dtoAttendanceIU.getAllowedRadiusMeters());
         attendance.setAttendanceType(dtoAttendanceIU.getAttendanceType());
         attendance.setSessionHours(dtoAttendanceIU.getSessionHours());
+        attendance.setStartedAt(dtoAttendanceIU.getStartedAt());
+        attendance.setExpiresAt(dtoAttendanceIU.getExpiresAt());
         attendance.setActive(dtoAttendanceIU.isActive());
         Attendance updatedAttendance = attendanceRepository.save(attendance);
         BeanUtils.copyProperties(updatedAttendance, dtoAttendance);

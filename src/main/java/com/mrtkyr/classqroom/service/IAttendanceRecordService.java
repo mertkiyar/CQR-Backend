@@ -9,9 +9,9 @@ import java.util.UUID;
 public interface IAttendanceRecordService {
     DtoAttendanceRecord saveAttendanceRecord(DtoAttendanceRecordIU dtoAttendanceRecordIU);
     List<DtoAttendanceRecord> getAllAttendanceRecords();
-    DtoAttendanceRecord getAttendanceRecordById(UUID id);
-    void deleteAttendanceRecord(UUID id);
-    DtoAttendanceRecord updateAttendanceRecord(UUID id, DtoAttendanceRecordIU dtoAttendanceRecordIU);
+    DtoAttendanceRecord getAttendanceRecordById(Integer id);
+    void deleteAttendanceRecord(Integer id);
+    DtoAttendanceRecord updateAttendanceRecord(Integer id, DtoAttendanceRecordIU dtoAttendanceRecordIU);
     List<DtoAttendanceRecord> getAttendanceRecordsByStudent(UUID studentId);
     List<DtoAttendanceRecord> getAttendanceRecordsByLecturer(UUID lecturerId);
 }

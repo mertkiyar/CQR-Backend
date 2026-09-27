@@ -10,7 +10,7 @@ import java.util.UUID;
 public interface IAttendanceRecordController {
     RootEntity<DtoAttendanceRecord> saveAttendanceRecord(DtoAttendanceRecordIU dtoAttendanceRecordIU);
     List<DtoAttendanceRecord> getAllAttendanceRecords();
-    RootEntity<DtoAttendanceRecord> getAttendanceRecordById(UUID id);
-    void deleteAttendanceRecord(UUID id);
-    RootEntity<DtoAttendanceRecord> updateAttendanceRecord(UUID id, DtoAttendanceRecordIU dtoAttendanceRecordIU);
+    RootEntity<DtoAttendanceRecord> getAttendanceRecordById(Integer id);
+    void deleteAttendanceRecord(Integer id);
+    RootEntity<DtoAttendanceRecord> updateAttendanceRecord(Integer id, DtoAttendanceRecordIU dtoAttendanceRecordIU);
 }

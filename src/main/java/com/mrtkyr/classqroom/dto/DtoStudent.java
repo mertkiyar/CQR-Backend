@@ -5,6 +5,7 @@ import com.mrtkyr.classqroom.enums.GenderType;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.math.BigDecimal;
 import java.util.UUID;
 
 @Getter
@@ -19,6 +20,8 @@ public class DtoStudent {
     private Department department;
     private String studentNumber;
     private Integer yearOfStudy;
+    private BigDecimal gpa;
+    private BigDecimal cgpa;
     private Boolean inCourse;
     private Boolean active;
     private Boolean inCampus;

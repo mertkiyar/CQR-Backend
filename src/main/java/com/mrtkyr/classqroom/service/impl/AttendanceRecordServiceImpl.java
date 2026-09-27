@@ -94,7 +94,7 @@ public class AttendanceRecordServiceImpl implements IAttendanceRecordService {
     }
 
     @Override
-    public DtoAttendanceRecord getAttendanceRecordById(UUID id) {
+    public DtoAttendanceRecord getAttendanceRecordById(Integer id) {
         DtoAttendanceRecord dtoAttendanceRecord = new DtoAttendanceRecord();
         Optional<AttendanceRecord> optAttendanceRecord = attendanceRecordRepository.findById(id);
         if (optAttendanceRecord.isEmpty()) {
@@ -105,7 +105,7 @@ public class AttendanceRecordServiceImpl implements IAttendanceRecordService {
     }
 
     @Override
-    public void deleteAttendanceRecord(UUID id) {
+    public void deleteAttendanceRecord(Integer id) {
         Optional<AttendanceRecord> optAttendanceRecord = attendanceRecordRepository.findById(id);
         if (optAttendanceRecord.isEmpty()) {
             throw new BaseException(new ErrorMessage(MessageType.NO_RECORD_EXIST, id.toString()));
@@ -114,7 +114,7 @@ public class AttendanceRecordServiceImpl implements IAttendanceRecordService {
     }
 
     @Override
-    public DtoAttendanceRecord updateAttendanceRecord(UUID id, DtoAttendanceRecordIU dtoAttendanceRecordIU) {
+    public DtoAttendanceRecord updateAttendanceRecord(Integer id, DtoAttendanceRecordIU dtoAttendanceRecordIU) {
         DtoAttendanceRecord dtoAttendanceRecord = new DtoAttendanceRecord();
         Optional<AttendanceRecord> optAttendanceRecord = attendanceRecordRepository.findById(id);
         if (optAttendanceRecord.isEmpty()) {

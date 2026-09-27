@@ -3,6 +3,7 @@ package com.mrtkyr.classqroom.service.impl;
 import com.mrtkyr.classqroom.dto.DtoLecturer;
 import com.mrtkyr.classqroom.dto.iu.DtoLecturerIU;
 import com.mrtkyr.classqroom.entity.Lecturer;
+import com.mrtkyr.classqroom.repository.DepartmentRepository;
 import com.mrtkyr.classqroom.enums.MessageType;
 import com.mrtkyr.classqroom.exception.BaseException;
 import com.mrtkyr.classqroom.exception.ErrorMessage;
@@ -22,6 +23,9 @@ public class LecturerServiceImpl implements ILecturerService {
 
     @Autowired
     private LecturerRepository lecturerRepository;
+
+    @Autowired
+    private DepartmentRepository departmentRepository;
 
     @Override
     public DtoLecturer saveLecturer(DtoLecturerIU dtoLecturerIU) {
@@ -73,10 +77,17 @@ public class LecturerServiceImpl implements ILecturerService {
         Optional<Lecturer> optLecturer = lecturerRepository.findById(id);
         if(optLecturer.isPresent()) {
             Lecturer lecturer = optLecturer.get();
+            lecturer.setFirstName(dtoLecturerIU.getFirstName());
+            lecturer.setLastName(dtoLecturerIU.getLastName());
+            lecturer.setGender(dtoLecturerIU.getGender());
+            Short departmentId = dtoLecturerIU.getDepartment().getId();
+            lecturer.setDepartment(departmentRepository.findById(departmentId)
+                    .orElseThrow(() -> new BaseException(new ErrorMessage(MessageType.NO_RECORD_EXIST, "Department " + departmentId))));
             lecturer.setLecturerTitle(dtoLecturerIU.getLecturerTitle());
             lecturer.setLecturerRole(dtoLecturerIU.getLecturerRole());
             lecturer.setPhone(dtoLecturerIU.getPhone());
             lecturer.setExtPhone(dtoLecturerIU.getExtPhone());
+            lecturer.setInCourse(dtoLecturerIU.isInCourse());
             Lecturer updatedLecturer = lecturerRepository.save(lecturer);
             BeanUtils.copyProperties(updatedLecturer, dtoLecturer);
             return dtoLecturer;
