@@ -57,7 +57,7 @@ public class AdminAuthController {
     }
 
     @GetMapping("/admin/session")
-    public RootEntity<String> session() { return RootEntity.ok("Aktif"); }
+    public RootEntity<String> session() { return RootEntity.ok("Active"); }
 
     @PostMapping("/admin/register")
     public RootEntity<DtoUser> register(@RequestBody @Valid DtoRegisterRequestIU request) {

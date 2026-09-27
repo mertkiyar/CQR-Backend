@@ -48,7 +48,7 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) {
         http.csrf(AbstractHttpConfigurer::disable).authorizeHttpRequests(request -> request
                 .dispatcherTypeMatchers(DispatcherType.ERROR).permitAll()
-                .requestMatchers(AUTHENTICATE, REGISTER, "/admin", "/admin/", "/admin/index.html", "/admin/app.js", "/admin/style.css", "/admin/login", SWAGGER_UI, API_DOCS)
+                .requestMatchers(AUTHENTICATE, REGISTER, "/admin", "/admin/", "/admin/index.html", "/admin/app.js", "/admin/style.css", "/admin/logo.png", "/admin/login", SWAGGER_UI, API_DOCS)
                 .permitAll()
                 .requestMatchers(org.springframework.http.HttpMethod.GET, "/users/me", "/students/*", "/lecturers/*", "/lecturer-courses/lecturers/*/courses", "/attendance-records/students/*", "/attendance-records/lecturers/*").authenticated()
                 .requestMatchers("/admin/**", "/languages", "/languages/**", "/faculties", "/faculties/**",
