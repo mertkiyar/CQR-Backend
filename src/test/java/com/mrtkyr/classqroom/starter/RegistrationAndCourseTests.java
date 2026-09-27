@@ -28,9 +28,28 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
 
 class RegistrationAndCourseTests {
+    @Test
+    void publicRegistrationCannotCreateAdmin() {
+        AuthServiceImpl service = new AuthServiceImpl();
+        UserRepository users = mock(UserRepository.class);
+        ReflectionTestUtils.setField(service, "userRepository", users);
+
+        assertThrows(BaseException.class, () -> service.register(new DtoRegisterRequestIU(
+                "Admin", "User", "admin@example.com", "password", GenderType.OTHER, UserType.ADMIN, 1)));
+        verifyNoInteractions(users);
+    }
+
+    @Test
+    void authorityComesFromPersistedUserType() {
+        User user = new User();
+        user.setUserType(UserType.ADMIN);
+        assertEquals("ROLE_ADMIN", user.getAuthorities().iterator().next().getAuthority());
+    }
+
     @Test
     void lecturerRegistrationPersistsLecturerProfile() {
         AuthServiceImpl service = new AuthServiceImpl();

@@ -1,0 +1,7 @@
+<!doctype html>
+<html lang="tr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ClassQRoom Yönetim</title><link rel="stylesheet" href="/admin/style.css"></head>
+<body><header><h1>ClassQRoom <small>Yönetim</small></h1><button id="logout" hidden>Çıkış</button></header>
+<main><p id="message" role="status"></p><section id="login-panel"><h2>Admin girişi</h2><form id="login-form"><label>E-posta<input name="email" type="email" autocomplete="username" required></label><label>Şifre<input name="password" type="password" autocomplete="current-password" required></label><button>Giriş yap</button></form></section>
+<section id="workspace" hidden><nav id="tabs" aria-label="Yönetim bölümleri"></nav><section id="content"></section></section></main>
+<script src="/admin/app.js" defer></script></body></html>

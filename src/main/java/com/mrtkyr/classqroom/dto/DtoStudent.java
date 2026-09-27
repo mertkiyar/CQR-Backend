@@ -5,12 +5,14 @@ import com.mrtkyr.classqroom.enums.GenderType;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 public class DtoStudent {
+    private UUID userId;
     private String firstName;
     private String lastName;
     private GenderType gender;

@@ -4,11 +4,13 @@ import com.mrtkyr.classqroom.entity.RootEntity;
 import com.mrtkyr.classqroom.enums.MessageType;
 import com.mrtkyr.classqroom.jwt.JwtAuthenticationFilter;
 import com.mrtkyr.classqroom.jwt.JwtService;
+import com.mrtkyr.classqroom.jwt.AdminCookieFilter;
 import jakarta.servlet.DispatcherType;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -31,21 +33,39 @@ public class SecurityConfig {
     private AuthenticationProvider authenticationProvider;
 
     private JwtAuthenticationFilter authenticationFilter;
+    private final AdminCookieFilter adminCookieFilter;
 
     @Autowired
     private JsonMapper jsonMapper;
 
-    public SecurityConfig(AuthenticationProvider authenticationProvider, JwtService jwtService, UserDetailsService userDetailsService) {
+    public SecurityConfig(AuthenticationProvider authenticationProvider, JwtService jwtService, UserDetailsService userDetailsService, AdminCookieFilter adminCookieFilter) {
         this.authenticationProvider = authenticationProvider;
         this.authenticationFilter = new JwtAuthenticationFilter(jwtService, userDetailsService);
+        this.adminCookieFilter = adminCookieFilter;
     }
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) {
         http.csrf(AbstractHttpConfigurer::disable).authorizeHttpRequests(request -> request
                 .dispatcherTypeMatchers(DispatcherType.ERROR).permitAll()
-                .requestMatchers(AUTHENTICATE, REGISTER, SWAGGER_UI, API_DOCS)
+                .requestMatchers(AUTHENTICATE, REGISTER, "/admin", "/admin/", "/admin/index.html", "/admin/app.js", "/admin/style.css", "/admin/login", SWAGGER_UI, API_DOCS)
                 .permitAll()
+                .requestMatchers(org.springframework.http.HttpMethod.GET, "/users/me", "/students/*", "/lecturers/*", "/lecturer-courses/lecturers/*/courses", "/attendance-records/students/*", "/attendance-records/lecturers/*").authenticated()
+                .requestMatchers("/admin/**", "/languages", "/languages/**", "/faculties", "/faculties/**",
+                        "/departments", "/departments/**", "/courses", "/courses/**", "/students", "/students/**",
+                        "/lecturers", "/lecturers/**", "/student-courses", "/student-courses/**",
+                        "/lecturer-courses", "/lecturer-courses/**", "/users", "/users/**")
+                .hasRole("ADMIN")
+                .requestMatchers(org.springframework.http.HttpMethod.POST, "/attendances").hasAnyRole("ADMIN", "LECTURER")
+                .requestMatchers(org.springframework.http.HttpMethod.GET, "/attendances").hasRole("ADMIN")
+                .requestMatchers(org.springframework.http.HttpMethod.GET, "/attendance-records").hasRole("ADMIN")
+                .requestMatchers(org.springframework.http.HttpMethod.POST, "/attendance-records").hasAnyRole("STUDENT", "ADMIN")
+                .requestMatchers(org.springframework.http.HttpMethod.GET, "/attendance-records/*").hasRole("ADMIN")
+                .requestMatchers(org.springframework.http.HttpMethod.POST, "/attendance-sessions/**").hasRole("ADMIN")
+                .requestMatchers(org.springframework.http.HttpMethod.PUT, "/attendance-sessions/**").hasRole("ADMIN")
+                .requestMatchers(org.springframework.http.HttpMethod.DELETE, "/attendance-sessions/**").hasRole("ADMIN")
+                .requestMatchers(org.springframework.http.HttpMethod.PUT, "/attendances/**", "/attendance-records/**").hasRole("ADMIN")
+                .requestMatchers(org.springframework.http.HttpMethod.DELETE, "/attendances/**", "/attendance-records/**").hasRole("ADMIN")
                 .anyRequest().authenticated())
                 .exceptionHandling(exceptions -> exceptions
                         .authenticationEntryPoint((request, response, exception) -> {
@@ -57,8 +77,16 @@ public class SecurityConfig {
                                 writeError(response, HttpServletResponse.SC_FORBIDDEN, MessageType.FORBIDDEN)))
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authenticationProvider(authenticationProvider)
-                .addFilterBefore(authenticationFilter, UsernamePasswordAuthenticationFilter.class);
+                .addFilterBefore(authenticationFilter, UsernamePasswordAuthenticationFilter.class)
+                .addFilterAfter(adminCookieFilter, JwtAuthenticationFilter.class);
         return http.build();
+    }
+
+    @Bean
+    public FilterRegistrationBean<AdminCookieFilter> adminCookieFilterRegistration(AdminCookieFilter filter) {
+        FilterRegistrationBean<AdminCookieFilter> registration = new FilterRegistrationBean<>(filter);
+        registration.setEnabled(false);
+        return registration;
     }
 
     private void writeError(HttpServletResponse response, int status, MessageType type) throws java.io.IOException {

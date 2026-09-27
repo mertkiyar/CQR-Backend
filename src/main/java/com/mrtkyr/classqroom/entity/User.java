@@ -13,6 +13,7 @@ import org.hibernate.annotations.UuidGenerator;
 import org.hibernate.type.SqlTypes;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 import java.time.LocalDateTime;
 import java.util.Collection;
@@ -68,7 +69,7 @@ public class User implements UserDetails {
     @NonNull
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of();
+        return userType == null ? List.of() : List.of(new SimpleGrantedAuthority("ROLE_" + userType.name()));
     }
 
     @NonNull

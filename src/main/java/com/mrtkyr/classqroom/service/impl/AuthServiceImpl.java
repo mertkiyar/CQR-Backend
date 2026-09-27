@@ -52,6 +52,9 @@ public class AuthServiceImpl implements IAuthService {
     @Transactional
     public DtoUser register(DtoRegisterRequestIU request) {
         DtoUser dtoUser = new DtoUser();
+        if (request.getUserType() != UserType.STUDENT && request.getUserType() != UserType.LECTURER) {
+            throw new BaseException(new ErrorMessage(MessageType.FORBIDDEN, "Only student and lecturer registration is allowed"));
+        }
         
         if (userRepository.findUserByEmail(request.getEmail()).isPresent()) {
             throw new BaseException(
