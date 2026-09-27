@@ -33,19 +33,19 @@ public class AttendanceRecordController extends RestBaseController implements IA
 
     @GetMapping("/{id}")
     @Override
-    public RootEntity<DtoAttendanceRecord> getAttendanceRecordById(@PathVariable(name = "id") UUID id) {
+    public RootEntity<DtoAttendanceRecord> getAttendanceRecordById(@PathVariable(name = "id") Integer id) {
         return ok(attendanceRecordService.getAttendanceRecordById(id));
     }
 
     @DeleteMapping("/{id}")
     @Override
-    public void deleteAttendanceRecord(@PathVariable(name = "id") UUID id) {
+    public void deleteAttendanceRecord(@PathVariable(name = "id") Integer id) {
         attendanceRecordService.deleteAttendanceRecord(id);
     }
 
     @PutMapping("/{id}")
     @Override
-    public RootEntity<DtoAttendanceRecord> updateAttendanceRecord(@PathVariable(name = "id") UUID id, @RequestBody @Valid DtoAttendanceRecordIU dtoAttendanceRecordIU) {
+    public RootEntity<DtoAttendanceRecord> updateAttendanceRecord(@PathVariable(name = "id") Integer id, @RequestBody @Valid DtoAttendanceRecordIU dtoAttendanceRecordIU) {
         return ok(attendanceRecordService.updateAttendanceRecord(id, dtoAttendanceRecordIU));
     }
 

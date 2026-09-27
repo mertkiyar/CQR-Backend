@@ -1,7 +1,7 @@
 'use strict';
 
 const $ = id => document.getElementById(id);
-const state = {section: 'languages', lists: {}, availability: null, pages: {}, renderToken: 0};
+const state = {section: 'languages', lists: {}, availability: null, pages: {}, renderToken: 0, editing: null};
 const field = (key, label, type = 'text', extra = {}) => ({key, label, type, ...extra});
 const sections = {
   languages: {
@@ -21,11 +21,13 @@ const sections = {
   },
   lecturers: {
     title: 'Lecturers', url: '/lecturers', requires: ['departments'], register: 'LECTURER',
-    columns: [['firstName', 'First name'], ['lastName', 'Last name'], ['department.departmentName', 'Department'], ['userId', 'ID']]
+    columns: [['firstName', 'First name'], ['lastName', 'Last name'], ['department.departmentName', 'Department'], ['userId', 'ID']],
+    editFields: [field('firstName', 'First name'), field('lastName', 'Last name'), field('gender', 'Gender', 'enum', {values: ['FEMALE', 'MALE', 'OTHER']}), field('department.id', 'Department', 'departments'), field('lecturerTitle', 'Title', 'enum', {values: ['PROFESSOR', 'ASSOCIATE_PROFESSOR', 'ASSISTANT_PROFESSOR', 'DOCTOR_LECTURER', 'LECTURER', 'RESEARCH_ASSISTANT', 'TEACHING_ASSISTANT', 'INSTRUCTOR', 'SPECIALIST', 'VISITING_PROFESSOR']}), field('lecturerRole', 'Role', 'enum', {values: ['LECTURER', 'RESEARCH_ASSISTANT', 'DEPARTMENT_HEAD', 'DEAN', 'RECTOR']}), field('phone', 'Phone', 'text', {optional: true}), field('extPhone', 'Extension', 'text', {optional: true}), field('inCourse', 'In course', 'boolean')]
   },
   students: {
     title: 'Students', url: '/students', requires: ['departments'], register: 'STUDENT',
-    columns: [['firstName', 'First name'], ['lastName', 'Last name'], ['studentNumber', 'Student number'], ['department.departmentName', 'Department'], ['userId', 'ID']]
+    columns: [['firstName', 'First name'], ['lastName', 'Last name'], ['studentNumber', 'Student number'], ['department.departmentName', 'Department'], ['userId', 'ID']],
+    editFields: [field('firstName', 'First name'), field('lastName', 'Last name'), field('gender', 'Gender', 'enum', {values: ['FEMALE', 'MALE', 'OTHER']}), field('department.id', 'Department', 'departments'), field('studentNumber', 'Student number'), field('yearOfStudy', 'Year of study', 'number'), field('gpa', 'GPA', 'number', {step: '0.01'}), field('cgpa', 'Cumulative GPA', 'number', {step: '0.01'}), field('inCourse', 'In course', 'boolean'), field('active', 'Active', 'boolean'), field('inCampus', 'On campus', 'boolean')]
   },
   courses: {
     title: 'Courses', url: '/courses', requires: ['languages', 'departments'],
@@ -35,21 +37,25 @@ const sections = {
   lecturerCourses: {
     title: 'Lecturer courses', url: '/lecturer-courses', requires: ['lecturers', 'courses'],
     columns: [['lecturer.firstName', 'Lecturer'], ['lecturer.lastName', 'Last name'], ['course.courseCode', 'Course'], ['active', 'Active']],
-    fields: [field('lecturer.userId', 'Lecturer', 'lecturers'), field('course.courseId', 'Course', 'courses'), field('active', 'Active', 'boolean')]
+    fields: [field('lecturer.userId', 'Lecturer', 'lecturers'), field('course.courseId', 'Course', 'courses'), field('active', 'Active', 'boolean')],
+    editFields: [field('active', 'Active', 'boolean')]
   },
   studentCourses: {
     title: 'Student courses', url: '/student-courses', requires: ['students', 'courses'],
     columns: [['student.firstName', 'Student'], ['student.lastName', 'Last name'], ['course.courseCode', 'Course'], ['active', 'Active']],
-    fields: [field('student.userId', 'Student', 'students'), field('course.courseId', 'Course', 'courses'), field('active', 'Active', 'boolean')]
+    fields: [field('student.userId', 'Student', 'students'), field('course.courseId', 'Course', 'courses'), field('active', 'Active', 'boolean')],
+    editFields: [field('active', 'Active', 'boolean')]
   },
   attendances: {
     title: 'Attendance', url: '/attendances', requires: ['courses'],
     columns: [['course.courseCode', 'Course'], ['attendanceType', 'Type'], ['startedAt', 'Starts at'], ['expiresAt', 'Expires at'], ['active', 'Open']],
-    fields: [field('course.courseId', 'Course', 'courses'), field('attendanceType', 'Type', 'enum', {values: ['QR_CODE', 'NFC', 'SIX_DIGIT_CODE']}), field('sessionHours', 'Duration (hours)', 'number', {value: '1'}), field('startedAt', 'Starts at', 'datetime-local'), field('expiresAt', 'Expires at', 'datetime-local'), field('active', 'Active', 'boolean')]
+    fields: [field('course.courseId', 'Course', 'courses'), field('attendanceType', 'Type', 'enum', {values: ['QR_CODE', 'NFC', 'SIX_DIGIT_CODE']}), field('sessionHours', 'Duration (hours)', 'number', {value: '1'}), field('startedAt', 'Starts at', 'datetime-local'), field('expiresAt', 'Expires at', 'datetime-local'), field('active', 'Active', 'boolean')],
+    editFields: [field('attendanceType', 'Type', 'enum', {values: ['QR_CODE', 'NFC', 'SIX_DIGIT_CODE']}), field('sessionHours', 'Duration (hours)', 'number'), field('startedAt', 'Starts at', 'datetime-local'), field('expiresAt', 'Expires at', 'datetime-local'), field('active', 'Active', 'boolean')]
   },
   records: {
     title: 'Attendance records', url: '/attendance-records', requires: ['attendances', 'students'],
-    columns: [['student.firstName', 'Student'], ['student.lastName', 'Last name'], ['attendanceSession.attendance.course.courseCode', 'Course'], ['attendanceType', 'Type'], ['attendAt', 'Recorded at'], ['late', 'Late']]
+    columns: [['student.firstName', 'Student'], ['student.lastName', 'Last name'], ['attendanceSession.attendance.course.courseCode', 'Course'], ['attendanceType', 'Type'], ['attendAt', 'Recorded at'], ['late', 'Late']],
+    editFields: [field('late', 'Late', 'boolean')]
   }
 };
 const groups = [
@@ -81,6 +87,7 @@ function showLogin(expired = false) {
   $('login-panel').hidden = false;
   state.lists = {};
   state.availability = null;
+  state.editing = null;
   if (expired) message('Session expired. Please sign in again.');
 }
 
@@ -143,6 +150,7 @@ function renderNav() {
       }
       button.addEventListener('click', () => {
         state.section = key;
+        state.editing = null;
         renderNav();
         render();
       });
@@ -171,7 +179,7 @@ async function load(key, force = false) {
   return rows;
 }
 
-function makeField(spec) {
+function makeField(spec, current) {
   const label = document.createElement('label');
   label.textContent = spec.label;
   let input;
@@ -190,17 +198,42 @@ function makeField(spec) {
     if (spec.value) input.value = spec.value;
   }
   input.name = spec.key;
-  input.required = true;
+  input.required = !spec.optional;
+  if (current != null) input.value = spec.type === 'datetime-local' ? String(current).slice(0, 16) : String(current);
   label.append(input);
   return label;
 }
 
 function renderForm(root, key, config) {
-  if (!config.fields && !config.register) return;
+  const editing = state.editing?.key === key ? state.editing.row : null;
+  if (!editing && !config.fields && !config.register) return;
+  const fields = editing ? (config.editFields || config.fields) : config.register
+    ? [field('firstName', 'First name'), field('lastName', 'Last name'), field('email', 'Email', 'email'), field('password', 'Temporary password', 'password'), field('gender', 'Gender', 'enum', {values: ['FEMALE', 'MALE', 'OTHER']}), field('departmentId', 'Department', 'departments')]
+    : config.fields;
+  if (!fields) return;
+  const header = document.createElement('div');
+  header.className = 'form-heading';
   const heading = document.createElement('h2');
-  heading.textContent = 'New entry';
-  root.append(heading);
-  if (config.register) {
+  heading.textContent = editing ? 'Edit entry' : 'New entry';
+  header.append(heading);
+  if (editing) {
+    const cancel = document.createElement('button');
+    cancel.type = 'button';
+    cancel.className = 'secondary-button';
+    cancel.textContent = 'Cancel';
+    cancel.onclick = () => { state.editing = null; render(); };
+    header.append(cancel);
+  }
+  root.append(header);
+  if (editing && (key === 'studentCourses' || key === 'lecturerCourses' || key === 'attendances' || key === 'records')) {
+    const note = document.createElement('p');
+    note.className = 'form-note';
+    const person = editing.student || editing.lecturer;
+    const course = editing.course || editing.attendanceSession?.attendance?.course;
+    note.textContent = [person && (person.firstName + ' ' + person.lastName), course?.courseCode].filter(Boolean).join(' · ');
+    root.append(note);
+  }
+  if (config.register && !editing) {
     const note = document.createElement('p');
     note.className = 'form-note';
     note.textContent = 'This form creates a user account and a ' + (config.register === 'STUDENT' ? 'student' : 'lecturer') + ' profile together.';
@@ -208,10 +241,7 @@ function renderForm(root, key, config) {
   }
   const form = document.createElement('form');
   form.className = 'form-grid';
-  const fields = config.register
-    ? [field('firstName', 'First name'), field('lastName', 'Last name'), field('email', 'Email', 'email'), field('password', 'Temporary password', 'password'), field('gender', 'Gender', 'enum', {values: ['FEMALE', 'MALE', 'OTHER']}), field('departmentId', 'Department', 'departments')]
-    : config.fields;
-  for (const spec of fields) form.append(makeField(spec));
+  for (const spec of fields) form.append(makeField(spec, editing ? path(editing, spec.key) : null));
   const button = document.createElement('button');
   button.type = 'submit';
   button.textContent = 'Save';
@@ -223,15 +253,45 @@ function renderForm(root, key, config) {
     const body = {};
     for (const spec of fields) {
       const value = form.elements[spec.key].value;
-      put(body, spec.key, spec.type === 'number' ? Number(value) : spec.type === 'boolean' ? value === 'true' : value);
+      const original = editing && path(editing, spec.key);
+      const preservedDate = spec.type === 'datetime-local' && original && value === String(original).slice(0, 16);
+      put(body, spec.key, spec.type === 'number' ? Number(value) : spec.type === 'boolean' ? value === 'true' : preservedDate ? original : value || (spec.optional ? null : value));
     }
-    if (config.register) {
+    if (editing && key === 'studentCourses') {
+      put(body, 'student.userId', editing.student.userId);
+      put(body, 'course.courseId', editing.course.courseId);
+    }
+    if (editing && key === 'lecturerCourses') {
+      put(body, 'lecturer.userId', editing.lecturer.userId);
+      put(body, 'course.courseId', editing.course.courseId);
+    }
+    if (editing && key === 'attendances') {
+      put(body, 'course.courseId', editing.course.courseId);
+      Object.assign(body, {nfcPath: editing.nfcPath, latitude: editing.latitude,
+        longitude: editing.longitude, allowedRadiusMeters: editing.allowedRadiusMeters});
+    }
+    if (editing && key === 'records') Object.assign(body, {
+      studentId: editing.student.userId,
+      attendanceSessionId: editing.attendanceSession.attendanceSessionId,
+      attendanceType: editing.attendanceType,
+      deviceId: editing.deviceId,
+      clientIp: editing.clientIp,
+      attendAt: editing.attendAt
+    });
+    if (!editing && config.register) {
       body.userType = config.register;
       body.departmentId = Number(body.departmentId);
     }
     try {
-      await api(config.register ? '/admin/register' : config.url, {method: 'POST', body: JSON.stringify(body)});
-      state.pages[key] = 0;
+      let url = config.register && !editing ? '/admin/register' : config.url;
+      if (editing) {
+        if (key === 'studentCourses') url += '/students/' + encodeURIComponent(editing.student.userId) + '/courses/' + encodeURIComponent(editing.course.courseId);
+        else if (key === 'lecturerCourses') url += '/lecturers/' + encodeURIComponent(editing.lecturer.userId) + '/courses/' + encodeURIComponent(editing.course.courseId);
+        else url += '/' + encodeURIComponent(editing[ids[key] || (key === 'attendances' ? 'attendanceId' : 'attendanceRecordId')]);
+      }
+      await api(url, {method: editing ? 'PUT' : 'POST', body: JSON.stringify(body)});
+      state.editing = null;
+      if (!editing) state.pages[key] = 0;
       await load(key, true);
       await refreshAvailability();
       renderNav();
@@ -249,11 +309,11 @@ function renderForm(root, key, config) {
 }
 
 function renderTable(root, key, config) {
-  const rows = key === 'attendances' ? state.lists[key].filter(row => row.active) : state.lists[key];
+  const rows = state.lists[key];
   const heading = document.createElement('div');
   heading.className = 'table-heading';
   const title = document.createElement('h2');
-  title.textContent = key === 'attendances' ? 'Open sessions' : 'Records';
+  title.textContent = key === 'attendances' ? 'Sessions' : 'Records';
   const count = document.createElement('p');
   count.className = 'muted';
   count.textContent = rows.length + (rows.length === 1 ? ' record' : ' records');
@@ -280,6 +340,9 @@ function renderTable(root, key, config) {
     th.textContent = label;
     header.append(th);
   }
+  const actionHead = document.createElement('th');
+  actionHead.textContent = 'Actions';
+  header.append(actionHead);
   head.append(header);
   table.append(head);
   const body = document.createElement('tbody');
@@ -291,6 +354,18 @@ function renderTable(root, key, config) {
       td.textContent = value == null ? '—' : typeof value === 'boolean' ? (value ? 'Yes' : 'No') : (enumLabels[value] || String(value));
       tr.append(td);
     }
+    const action = document.createElement('td');
+    const edit = document.createElement('button');
+    edit.type = 'button';
+    edit.className = 'row-edit';
+    edit.textContent = 'Edit';
+    edit.setAttribute('aria-label', 'Edit ' + config.title + ' entry');
+    edit.onclick = () => {
+      state.editing = {key, row};
+      render().then(success => { if (success) $('content').scrollIntoView({behavior: 'smooth', block: 'start'}); });
+    };
+    action.append(edit);
+    tr.append(action);
     body.append(tr);
   }
   table.append(body);
@@ -323,7 +398,9 @@ async function render() {
   message('');
   $('page-title').textContent = config.title;
   try {
-    const dependencies = [...new Set([...(config.fields || []).map(spec => spec.type).filter(type => sections[type]), ...(config.register ? ['departments'] : []), key])];
+    const referenceTypes = [...(config.fields || []), ...(config.editFields || [])]
+      .map(spec => spec.type).filter(type => sections[type]);
+    const dependencies = [...new Set([...referenceTypes, ...(config.register ? ['departments'] : []), key])];
     await Promise.all(dependencies.map(loadKey => load(loadKey)));
     if (token !== state.renderToken) return false;
     const root = $('content');
@@ -365,6 +442,7 @@ $('refresh').addEventListener('click', async event => {
   button.disabled = true;
   try {
     state.lists = {};
+    state.editing = null;
     await refreshAvailability();
     renderNav();
     await render();

@@ -7,6 +7,8 @@ import com.mrtkyr.classqroom.enums.MessageType;
 import com.mrtkyr.classqroom.exception.BaseException;
 import com.mrtkyr.classqroom.exception.ErrorMessage;
 import com.mrtkyr.classqroom.repository.DepartmentRepository;
+import com.mrtkyr.classqroom.repository.LanguageRepository;
+import com.mrtkyr.classqroom.repository.FacultyRepository;
 import com.mrtkyr.classqroom.service.IDepartmentService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +23,12 @@ public class DepartmentServiceImpl implements IDepartmentService {
 
     @Autowired
     private DepartmentRepository departmentRepository;
+
+    @Autowired
+    private LanguageRepository languageRepository;
+
+    @Autowired
+    private FacultyRepository facultyRepository;
 
     @Override
     public DtoDepartment saveDepartment(DtoDepartmentIU dtoDepartmentIU) {
@@ -74,6 +82,12 @@ public class DepartmentServiceImpl implements IDepartmentService {
             Department department = optDepartment.get();
             department.setDepartmentName(dtoDepartmentIU.getDepartmentName());
             department.setDepartmentCode(dtoDepartmentIU.getDepartmentCode());
+            Short languageId = dtoDepartmentIU.getLanguage().getId();
+            Short facultyId = dtoDepartmentIU.getFaculty().getFacultyId();
+            department.setLanguage(languageRepository.findById(languageId)
+                    .orElseThrow(() -> new BaseException(new ErrorMessage(MessageType.NO_RECORD_EXIST, "Language " + languageId))));
+            department.setFaculty(facultyRepository.findById(facultyId)
+                    .orElseThrow(() -> new BaseException(new ErrorMessage(MessageType.NO_RECORD_EXIST, "Faculty " + facultyId))));
             Department updatedDepartment = departmentRepository.save(department);
             BeanUtils.copyProperties(updatedDepartment, dtoDepartment);
             return dtoDepartment;

@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/student-courses")
@@ -47,5 +48,11 @@ public class StudentCourseControllerImpl extends RestBaseController implements I
     @Override
     public RootEntity<DtoStudentCourse> updateStudentCourse(@PathVariable(name = "id") StudentCourseId id, @RequestBody @Valid DtoStudentCourseIU dtoStudentCourseIU) {
         return ok(studentCourseService.updateStudentCourse(id, dtoStudentCourseIU));
+    }
+
+    @PutMapping("/students/{studentId}/courses/{courseId}")
+    public RootEntity<DtoStudentCourse> updateStudentCourseByIds(@PathVariable UUID studentId, @PathVariable UUID courseId,
+                                                                  @RequestBody @Valid DtoStudentCourseIU body) {
+        return ok(studentCourseService.updateStudentCourse(new StudentCourseId(studentId, courseId), body));
     }
 }

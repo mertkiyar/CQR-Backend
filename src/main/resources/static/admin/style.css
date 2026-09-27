@@ -69,6 +69,10 @@ p { line-height: 1.5; }
 .login-card .muted { margin: 7px 0 24px; }
 .login-card form button { width: 100%; margin-top: 12px; }
 .form-note { margin: -3px 0 18px; color: #667a91; font-size: .86rem; }
+.form-heading { display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-bottom: 15px; }
+.form-heading h2 { margin: 0; }
+.secondary-button, .row-edit { padding: 7px 12px; border: 1px solid #b9c8d7; border-radius: 7px; background: #fff; color: #235f9e; font: inherit; font-weight: 700; cursor: pointer; }
+.secondary-button:hover, .row-edit:hover { background: #eef5fc; border-color: #7d9bb9; }
 .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(195px, 1fr)); gap: 12px 16px; align-items: end; }
 label { display: block; font-size: .85rem; font-weight: 650; color: #344960; }
 .login-card label + label { margin-top: 15px; }
@@ -91,6 +95,7 @@ th, td { padding: 11px 13px; border-bottom: 1px solid #e8edf3; text-align: left;
 th { background: #f6f8fb; color: #51657b; font-size: .78rem; font-weight: 750; }
 tbody tr:last-child td { border-bottom: 0; }
 tbody tr:hover { background: #f8fbff; }
+td:last-child, th:last-child { text-align: right; }
 .empty { margin: 0; padding: 22px; color: #63788e; text-align: center; }
 .pager { display: flex; justify-content: flex-end; align-items: center; gap: 10px; margin-top: 14px; color: #667a91; font-size: .83rem; }
 .pager button { min-height: 34px; padding: 6px 12px; background: #fff; color: #235f9e; }

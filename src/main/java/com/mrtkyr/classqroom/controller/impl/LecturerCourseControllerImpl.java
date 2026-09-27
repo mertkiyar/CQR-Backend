@@ -51,6 +51,12 @@ public class LecturerCourseControllerImpl extends RestBaseController implements 
         return ok(lecturerCourseService.updateLecturerCourse(id, dtoLecturerCourseIU));
     }
 
+    @PutMapping("/lecturers/{lecturerId}/courses/{courseId}")
+    public RootEntity<DtoLecturerCourse> updateLecturerCourseByIds(@PathVariable UUID lecturerId, @PathVariable UUID courseId,
+                                                                    @RequestBody @Valid DtoLecturerCourseIU body) {
+        return ok(lecturerCourseService.updateLecturerCourse(new LecturerCourseId(lecturerId, courseId), body));
+    }
+
     @GetMapping("/lecturers/{id}/courses")
     @Override
     public RootEntity<List<DtoCourse>> getActiveCoursesByLecturer(@PathVariable(name = "id") UUID lecturerId) {

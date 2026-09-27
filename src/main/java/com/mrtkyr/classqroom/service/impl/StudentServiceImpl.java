@@ -3,6 +3,7 @@ package com.mrtkyr.classqroom.service.impl;
 import com.mrtkyr.classqroom.dto.DtoStudent;
 import com.mrtkyr.classqroom.dto.iu.DtoStudentIU;
 import com.mrtkyr.classqroom.entity.Student;
+import com.mrtkyr.classqroom.repository.DepartmentRepository;
 import com.mrtkyr.classqroom.enums.MessageType;
 import com.mrtkyr.classqroom.exception.BaseException;
 import com.mrtkyr.classqroom.exception.ErrorMessage;
@@ -22,6 +23,9 @@ public class StudentServiceImpl implements IStudentService {
 
     @Autowired
     private StudentRepository studentRepository;
+
+    @Autowired
+    private DepartmentRepository departmentRepository;
 
     @Override
     public DtoStudent saveStudent(DtoStudentIU dtoStudentIU) {
@@ -73,11 +77,19 @@ public class StudentServiceImpl implements IStudentService {
         Optional<Student> optStudent = studentRepository.findById(id);
         if (optStudent.isPresent()) {
             Student student = optStudent.get();
+            student.setFirstName(dtoStudentIU.getFirstName());
+            student.setLastName(dtoStudentIU.getLastName());
+            student.setGender(dtoStudentIU.getGender());
+            Short departmentId = dtoStudentIU.getDepartment().getId();
+            student.setDepartment(departmentRepository.findById(departmentId)
+                    .orElseThrow(() -> new BaseException(new ErrorMessage(MessageType.NO_RECORD_EXIST, "Department " + departmentId))));
+            student.setStudentNumber(dtoStudentIU.getStudentNumber());
             student.setYearOfStudy(dtoStudentIU.getYearOfStudy());
             student.setGpa(dtoStudentIU.getGpa());
             student.setCgpa(dtoStudentIU.getCgpa());
             student.setActive(dtoStudentIU.getActive());
             student.setInCampus(dtoStudentIU.getInCampus());
+            student.setInCourse(dtoStudentIU.getInCourse());
             Student updatedStudent = studentRepository.save(student);
             BeanUtils.copyProperties(updatedStudent, dtoStudent);
             return dtoStudent;
