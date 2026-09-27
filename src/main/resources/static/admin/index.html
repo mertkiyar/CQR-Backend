@@ -1,44 +1,44 @@
 <!doctype html>
-<html lang="tr">
+<html lang="en">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>ClassQRoom · Öğrenci İşleri</title>
-  <link rel="stylesheet" href="/admin/style.css?v=2">
+  <title>ClassQRoom · Student Affairs</title>
+  <link rel="stylesheet" href="/admin/style.css?v=4">
 </head>
 <body>
   <div class="app-shell">
     <aside id="sidebar" class="sidebar" hidden>
       <div class="brand">
-        <img src="/admin/logo.png" alt="ClassQRoom logosu" width="44" height="44">
-        <div><strong>ClassQRoom</strong><span>Öğrenci İşleri</span></div>
+        <img src="/admin/logo.png" alt="ClassQRoom logo" width="44" height="44">
+        <div><strong>ClassQRoom</strong><span>Student Affairs</span></div>
       </div>
-      <nav id="tabs" aria-label="Yönetim bölümleri"></nav>
-      <div class="sidebar-footer"><button id="logout" type="button">Çıkış yap</button></div>
+      <nav id="tabs" aria-label="Admin sections"></nav>
+      <div class="sidebar-footer"><button id="logout" type="button">Sign out</button></div>
     </aside>
 
     <main>
       <p id="message" role="status" aria-live="polite"></p>
       <section id="login-panel" class="login-card">
         <div class="login-brand"><img src="/admin/logo.png" alt="" width="56" height="56"><span>ClassQRoom</span></div>
-        <h1>Yönetici girişi</h1>
-        <p class="muted">Öğrenci işleri yönetim paneli</p>
+        <h1>Admin sign in</h1>
+        <p class="muted">Student affairs management panel</p>
         <form id="login-form">
-          <label>E-posta<input name="email" type="email" autocomplete="username" required></label>
-          <label>Şifre<input name="password" type="password" autocomplete="current-password" required></label>
-          <button type="submit">Giriş yap</button>
+          <label>Email<input name="email" type="email" autocomplete="username" required></label>
+          <label>Password<input name="password" type="password" autocomplete="current-password" required></label>
+          <button type="submit">Sign in</button>
         </form>
       </section>
 
       <section id="workspace" hidden>
         <header class="page-header">
-          <div><p class="eyebrow">ÖĞRENCİ İŞLERİ</p><h1 id="page-title">Diller</h1></div>
-          <button id="refresh" type="button">Yenile</button>
+          <div><p class="eyebrow">STUDENT AFFAIRS</p><h1 id="page-title">Languages</h1></div>
+          <button id="refresh" type="button">Refresh</button>
         </header>
         <section id="content" class="content-card" aria-live="polite"></section>
       </section>
     </main>
   </div>
-  <script src="/admin/app.js?v=2" defer></script>
+  <script src="/admin/app.js?v=3" defer></script>
 </body>
 </html>

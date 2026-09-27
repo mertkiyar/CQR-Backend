@@ -5,58 +5,58 @@ const state = {section: 'languages', lists: {}, availability: null, pages: {}, r
 const field = (key, label, type = 'text', extra = {}) => ({key, label, type, ...extra});
 const sections = {
   languages: {
-    title: 'Diller', url: '/languages',
-    columns: [['id', 'ID'], ['languageName', 'Dil']],
-    fields: [field('languageName', 'Dil adı')]
+    title: 'Languages', url: '/languages',
+    columns: [['id', 'ID'], ['languageName', 'Language']],
+    fields: [field('languageName', 'Language name')]
   },
   faculties: {
-    title: 'Fakülteler', url: '/faculties',
-    columns: [['facultyId', 'ID'], ['facultyName', 'Fakülte']],
-    fields: [field('facultyName', 'Fakülte adı')]
+    title: 'Faculties', url: '/faculties',
+    columns: [['facultyId', 'ID'], ['facultyName', 'Faculty']],
+    fields: [field('facultyName', 'Faculty name')]
   },
   departments: {
-    title: 'Bölümler', url: '/departments', requires: ['languages', 'faculties'],
-    columns: [['id', 'ID'], ['departmentName', 'Bölüm'], ['departmentCode', 'Kod'], ['faculty.facultyName', 'Fakülte'], ['language.languageName', 'Dil']],
-    fields: [field('departmentName', 'Bölüm adı'), field('departmentCode', 'Kod'), field('faculty.facultyId', 'Fakülte', 'faculties'), field('language.id', 'Dil', 'languages')]
+    title: 'Departments', url: '/departments', requires: ['languages', 'faculties'],
+    columns: [['id', 'ID'], ['departmentName', 'Department'], ['departmentCode', 'Code'], ['faculty.facultyName', 'Faculty'], ['language.languageName', 'Language']],
+    fields: [field('departmentName', 'Department name'), field('departmentCode', 'Code'), field('faculty.facultyId', 'Faculty', 'faculties'), field('language.id', 'Language', 'languages')]
   },
   lecturers: {
-    title: 'Öğretmenler', url: '/lecturers', requires: ['departments'], register: 'LECTURER',
-    columns: [['firstName', 'Ad'], ['lastName', 'Soyad'], ['department.departmentName', 'Bölüm'], ['userId', 'ID']]
+    title: 'Lecturers', url: '/lecturers', requires: ['departments'], register: 'LECTURER',
+    columns: [['firstName', 'First name'], ['lastName', 'Last name'], ['department.departmentName', 'Department'], ['userId', 'ID']]
   },
   students: {
-    title: 'Öğrenciler', url: '/students', requires: ['departments'], register: 'STUDENT',
-    columns: [['firstName', 'Ad'], ['lastName', 'Soyad'], ['studentNumber', 'Numara'], ['department.departmentName', 'Bölüm'], ['userId', 'ID']]
+    title: 'Students', url: '/students', requires: ['departments'], register: 'STUDENT',
+    columns: [['firstName', 'First name'], ['lastName', 'Last name'], ['studentNumber', 'Student number'], ['department.departmentName', 'Department'], ['userId', 'ID']]
   },
   courses: {
-    title: 'Dersler', url: '/courses', requires: ['languages', 'departments'],
-    columns: [['courseCode', 'Kod'], ['courseName', 'Ders'], ['department.departmentName', 'Bölüm'], ['courseId', 'ID']],
-    fields: [field('courseName', 'Ders adı'), field('courseCode', 'Kod'), field('courseEcts', 'AKTS', 'number', {step: '0.1'}), field('courseCredit', 'Kredi', 'number', {step: '0.1'}), field('hoursTheoretical', 'Teorik saat', 'number'), field('hoursPractical', 'Uygulama saati', 'number'), field('minAttendancePercent', 'Asgari devam %', 'number'), field('language.id', 'Dil', 'languages'), field('department.id', 'Bölüm', 'departments'), field('online', 'Çevrimiçi', 'boolean'), field('elective', 'Seçmeli', 'boolean')]
+    title: 'Courses', url: '/courses', requires: ['languages', 'departments'],
+    columns: [['courseCode', 'Code'], ['courseName', 'Course'], ['department.departmentName', 'Department'], ['courseId', 'ID']],
+    fields: [field('courseName', 'Course name'), field('courseCode', 'Code'), field('courseEcts', 'ECTS', 'number', {step: '0.1'}), field('courseCredit', 'Credits', 'number', {step: '0.1'}), field('hoursTheoretical', 'Theory hours', 'number'), field('hoursPractical', 'Practical hours', 'number'), field('minAttendancePercent', 'Minimum attendance (%)', 'number'), field('language.id', 'Language', 'languages'), field('department.id', 'Department', 'departments'), field('online', 'Online', 'boolean'), field('elective', 'Elective', 'boolean')]
   },
   lecturerCourses: {
-    title: 'Öğretmen–ders', url: '/lecturer-courses', requires: ['lecturers', 'courses'],
-    columns: [['lecturer.firstName', 'Öğretmen'], ['lecturer.lastName', 'Soyad'], ['course.courseCode', 'Ders'], ['active', 'Aktif']],
-    fields: [field('lecturer.userId', 'Öğretmen', 'lecturers'), field('course.courseId', 'Ders', 'courses'), field('active', 'Aktif', 'boolean')]
+    title: 'Lecturer courses', url: '/lecturer-courses', requires: ['lecturers', 'courses'],
+    columns: [['lecturer.firstName', 'Lecturer'], ['lecturer.lastName', 'Last name'], ['course.courseCode', 'Course'], ['active', 'Active']],
+    fields: [field('lecturer.userId', 'Lecturer', 'lecturers'), field('course.courseId', 'Course', 'courses'), field('active', 'Active', 'boolean')]
   },
   studentCourses: {
-    title: 'Öğrenci–ders', url: '/student-courses', requires: ['students', 'courses'],
-    columns: [['student.firstName', 'Öğrenci'], ['student.lastName', 'Soyad'], ['course.courseCode', 'Ders'], ['active', 'Aktif']],
-    fields: [field('student.userId', 'Öğrenci', 'students'), field('course.courseId', 'Ders', 'courses'), field('active', 'Aktif', 'boolean')]
+    title: 'Student courses', url: '/student-courses', requires: ['students', 'courses'],
+    columns: [['student.firstName', 'Student'], ['student.lastName', 'Last name'], ['course.courseCode', 'Course'], ['active', 'Active']],
+    fields: [field('student.userId', 'Student', 'students'), field('course.courseId', 'Course', 'courses'), field('active', 'Active', 'boolean')]
   },
   attendances: {
-    title: 'Açık yoklamalar', url: '/attendances', requires: ['courses'],
-    columns: [['course.courseCode', 'Ders'], ['attendanceType', 'Tür'], ['startedAt', 'Başlangıç'], ['expiresAt', 'Bitiş'], ['active', 'Açık']],
-    fields: [field('course.courseId', 'Ders', 'courses'), field('attendanceType', 'Tür', 'enum', {values: ['QR_CODE', 'NFC', 'SIX_DIGIT_CODE']}), field('sessionHours', 'Süre (saat)', 'number', {value: '1'}), field('startedAt', 'Başlangıç', 'datetime-local'), field('expiresAt', 'Bitiş', 'datetime-local'), field('active', 'Aktif', 'boolean')]
+    title: 'Attendance', url: '/attendances', requires: ['courses'],
+    columns: [['course.courseCode', 'Course'], ['attendanceType', 'Type'], ['startedAt', 'Starts at'], ['expiresAt', 'Expires at'], ['active', 'Open']],
+    fields: [field('course.courseId', 'Course', 'courses'), field('attendanceType', 'Type', 'enum', {values: ['QR_CODE', 'NFC', 'SIX_DIGIT_CODE']}), field('sessionHours', 'Duration (hours)', 'number', {value: '1'}), field('startedAt', 'Starts at', 'datetime-local'), field('expiresAt', 'Expires at', 'datetime-local'), field('active', 'Active', 'boolean')]
   },
   records: {
-    title: 'Yoklama kayıtları', url: '/attendance-records', requires: ['attendances', 'students'],
-    columns: [['student.firstName', 'Öğrenci'], ['student.lastName', 'Soyad'], ['attendanceSession.attendance.course.courseCode', 'Ders'], ['attendanceType', 'Tür'], ['attendAt', 'Zaman'], ['late', 'Geç']]
+    title: 'Attendance records', url: '/attendance-records', requires: ['attendances', 'students'],
+    columns: [['student.firstName', 'Student'], ['student.lastName', 'Last name'], ['attendanceSession.attendance.course.courseCode', 'Course'], ['attendanceType', 'Type'], ['attendAt', 'Recorded at'], ['late', 'Late']]
   }
 };
 const groups = [
-  {title: 'Akademik yapı', keys: ['languages', 'faculties', 'departments']},
-  {title: 'Kişiler', keys: ['lecturers', 'students']},
-  {title: 'Ders yönetimi', keys: ['courses', 'lecturerCourses', 'studentCourses']},
-  {title: 'Yoklama', keys: ['attendances', 'records']}
+  {title: 'Academic structure', keys: ['languages', 'faculties', 'departments']},
+  {title: 'People', keys: ['lecturers', 'students']},
+  {title: 'Course management', keys: ['courses', 'lecturerCourses', 'studentCourses']},
+  {title: 'Attendance', keys: ['attendances', 'records']}
 ];
 const names = {
   languages: row => row.languageName,
@@ -67,6 +67,7 @@ const names = {
   courses: row => row.courseCode + ' · ' + row.courseName
 };
 const ids = {languages: 'id', faculties: 'facultyId', departments: 'id', lecturers: 'userId', students: 'userId', courses: 'courseId'};
+const enumLabels = {FEMALE: 'Female', MALE: 'Male', OTHER: 'Other', QR_CODE: 'QR code', NFC: 'NFC', SIX_DIGIT_CODE: 'Six-digit code'};
 
 function message(value, ok = false) {
   $('message').textContent = value;
@@ -80,7 +81,7 @@ function showLogin(expired = false) {
   $('login-panel').hidden = false;
   state.lists = {};
   state.availability = null;
-  if (expired) message('Oturum süresi doldu. Lütfen yeniden giriş yapın.');
+  if (expired) message('Session expired. Please sign in again.');
 }
 
 function showWorkspace() {
@@ -99,10 +100,10 @@ async function api(url, options = {}) {
   try { payload = await response.json(); } catch { payload = {}; }
   if (response.status === 401 && url !== '/admin/login') {
     showLogin(true);
-    throw new Error('Oturum süresi doldu. Lütfen yeniden giriş yapın.');
+    throw new Error('Session expired. Please sign in again.');
   }
   if (!response.ok || payload.result === false) {
-    throw new Error(payload.errorMessage || 'İstek başarısız (' + response.status + ')');
+    throw new Error(payload.errorMessage || 'Request failed (' + response.status + ')');
   }
   return payload.data ?? payload;
 }
@@ -137,7 +138,7 @@ function renderNav() {
       if (missing.length) {
         const reason = document.createElement('span');
         reason.className = 'nav-reason';
-        reason.textContent = 'Önce ' + missing.map(item => sections[item].title.toLocaleLowerCase('tr')).join(' ve ') + ' ekleyin';
+        reason.textContent = 'Add ' + missing.map(item => sections[item].title.toLocaleLowerCase('en')).join(' and ') + ' first';
         button.append(reason);
       }
       button.addEventListener('click', () => {
@@ -165,7 +166,7 @@ function put(target, key, value) {
 async function load(key, force = false) {
   if (!force && Array.isArray(state.lists[key])) return state.lists[key];
   const rows = await api(sections[key].url);
-  if (!Array.isArray(rows)) throw new Error(sections[key].title + ' listesi okunamadı.');
+  if (!Array.isArray(rows)) throw new Error(sections[key].title + ' could not be loaded.');
   state.lists[key] = rows;
   return rows;
 }
@@ -177,10 +178,10 @@ function makeField(spec) {
   if (spec.type === 'boolean' || spec.type === 'enum' || sections[spec.type]) {
     input = document.createElement('select');
     let choices = [];
-    if (spec.type === 'boolean') choices = [['true', 'Evet'], ['false', 'Hayır']];
-    else if (spec.type === 'enum') choices = spec.values.map(value => [value, value]);
+    if (spec.type === 'boolean') choices = [['true', 'Yes'], ['false', 'No']];
+    else if (spec.type === 'enum') choices = spec.values.map(value => [value, enumLabels[value] || value]);
     else choices = (state.lists[spec.type] || []).map(row => [row[ids[spec.type]], names[spec.type](row)]);
-    input.add(new Option('Seçin', ''));
+    input.add(new Option('Select', ''));
     for (const [id, name] of choices) input.add(new Option(name, id));
   } else {
     input = document.createElement('input');
@@ -197,23 +198,23 @@ function makeField(spec) {
 function renderForm(root, key, config) {
   if (!config.fields && !config.register) return;
   const heading = document.createElement('h2');
-  heading.textContent = 'Yeni kayıt';
+  heading.textContent = 'New entry';
   root.append(heading);
   if (config.register) {
     const note = document.createElement('p');
     note.className = 'form-note';
-    note.textContent = 'Bu form kullanıcı hesabını ve ' + (config.register === 'STUDENT' ? 'öğrenci' : 'öğretmen') + ' profilini birlikte oluşturur.';
+    note.textContent = 'This form creates a user account and a ' + (config.register === 'STUDENT' ? 'student' : 'lecturer') + ' profile together.';
     root.append(note);
   }
   const form = document.createElement('form');
   form.className = 'form-grid';
   const fields = config.register
-    ? [field('firstName', 'Ad'), field('lastName', 'Soyad'), field('email', 'E-posta', 'email'), field('password', 'Geçici şifre', 'password'), field('gender', 'Cinsiyet', 'enum', {values: ['FEMALE', 'MALE', 'OTHER']}), field('departmentId', 'Bölüm', 'departments')]
+    ? [field('firstName', 'First name'), field('lastName', 'Last name'), field('email', 'Email', 'email'), field('password', 'Temporary password', 'password'), field('gender', 'Gender', 'enum', {values: ['FEMALE', 'MALE', 'OTHER']}), field('departmentId', 'Department', 'departments')]
     : config.fields;
   for (const spec of fields) form.append(makeField(spec));
   const button = document.createElement('button');
   button.type = 'submit';
-  button.textContent = 'Kaydet';
+  button.textContent = 'Save';
   form.append(button);
   form.addEventListener('submit', async event => {
     event.preventDefault();
@@ -234,7 +235,7 @@ function renderForm(root, key, config) {
       await load(key, true);
       await refreshAvailability();
       renderNav();
-      if (await render()) message('Kayıt eklendi; tablo yenilendi.', true);
+      if (await render()) message('Saved. The table has been refreshed.', true);
     } catch (error) {
       message(error.message);
     } finally {
@@ -252,16 +253,16 @@ function renderTable(root, key, config) {
   const heading = document.createElement('div');
   heading.className = 'table-heading';
   const title = document.createElement('h2');
-  title.textContent = key === 'attendances' ? 'Açık kayıtlar' : 'Kayıtlar';
+  title.textContent = key === 'attendances' ? 'Open sessions' : 'Records';
   const count = document.createElement('p');
   count.className = 'muted';
-  count.textContent = rows.length + ' kayıt';
+  count.textContent = rows.length + (rows.length === 1 ? ' record' : ' records');
   heading.append(title, count);
   root.append(heading);
   if (!rows.length) {
     const empty = document.createElement('p');
     empty.className = 'empty';
-    empty.textContent = 'Henüz kayıt yok.';
+    empty.textContent = 'No records yet.';
     root.append(empty);
     return;
   }
@@ -287,7 +288,7 @@ function renderTable(root, key, config) {
     for (const [property] of config.columns) {
       const td = document.createElement('td');
       const value = path(row, property);
-      td.textContent = value == null ? '—' : typeof value === 'boolean' ? (value ? 'Evet' : 'Hayır') : String(value);
+      td.textContent = value == null ? '—' : typeof value === 'boolean' ? (value ? 'Yes' : 'No') : (enumLabels[value] || String(value));
       tr.append(td);
     }
     body.append(tr);
@@ -300,14 +301,14 @@ function renderTable(root, key, config) {
     pager.className = 'pager';
     const previous = document.createElement('button');
     previous.type = 'button';
-    previous.textContent = 'Önceki';
+    previous.textContent = 'Previous';
     previous.disabled = page === 0;
     previous.onclick = () => { state.pages[key] = page - 1; render(); };
     const position = document.createElement('span');
     position.textContent = (page + 1) + ' / ' + pages;
     const next = document.createElement('button');
     next.type = 'button';
-    next.textContent = 'Sonraki';
+    next.textContent = 'Next';
     next.disabled = page + 1 >= pages;
     next.onclick = () => { state.pages[key] = page + 1; render(); };
     pager.append(previous, position, next);
@@ -378,7 +379,7 @@ $('logout').addEventListener('click', async () => {
   try { await api('/admin/logout', {method: 'POST'}); }
   finally {
     showLogin();
-    message('Çıkış yapıldı.', true);
+    message('Signed out.', true);
   }
 });
 
