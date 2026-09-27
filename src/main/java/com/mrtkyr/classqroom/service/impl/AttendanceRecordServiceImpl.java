@@ -13,10 +13,12 @@ import com.mrtkyr.classqroom.repository.AttendanceRecordRepository;
 import com.mrtkyr.classqroom.repository.AttendanceSessionRepository;
 import com.mrtkyr.classqroom.repository.LecturerCourseRepository;
 import com.mrtkyr.classqroom.repository.StudentRepository;
+import com.mrtkyr.classqroom.repository.StudentCourseRepository;
 import com.mrtkyr.classqroom.service.IAttendanceRecordService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,18 +35,34 @@ public class AttendanceRecordServiceImpl implements IAttendanceRecordService {
     private StudentRepository studentRepository;
 
     @Autowired
+    private StudentCourseRepository studentCourseRepository;
+
+    @Autowired
     private AttendanceSessionRepository attendanceSessionRepository;
 
     @Autowired
     private LecturerCourseRepository lecturerCourseRepository;
 
     @Override
+    @Transactional
     public DtoAttendanceRecord saveAttendanceRecord(DtoAttendanceRecordIU dtoAttendanceRecordIU) {
         Student student = studentRepository.findById(dtoAttendanceRecordIU.getStudentId())
                 .orElseThrow(() -> new BaseException(new ErrorMessage(MessageType.NO_RECORD_EXIST, dtoAttendanceRecordIU.getStudentId().toString())));
 
         AttendanceSession attendanceSession = attendanceSessionRepository.findById(dtoAttendanceRecordIU.getAttendanceSessionId())
                 .orElseThrow(() -> new BaseException(new ErrorMessage(MessageType.NO_RECORD_EXIST, dtoAttendanceRecordIU.getAttendanceSessionId().toString())));
+
+        UUID studentId = student.getUserId();
+        UUID courseId = attendanceSession.getAttendance().getCourse().getCourseId();
+        if (!studentCourseRepository.existsByStudent_UserIdAndCourse_CourseIdAndActiveTrue(studentId, courseId)) {
+            throw new BaseException(new ErrorMessage(MessageType.BUSINESS_RULE_VIOLATION,
+                    "Student is not enrolled in this course"));
+        }
+        UUID attendanceId = attendanceSession.getAttendance().getAttendanceId();
+        if (attendanceRecordRepository.existsByStudent_UserIdAndAttendanceSession_Attendance_AttendanceId(studentId, attendanceId)) {
+            throw new BaseException(new ErrorMessage(MessageType.RECORD_ALREADY_EXIST,
+                    "Attendance has already been recorded for this class"));
+        }
 
         AttendanceRecord attendanceRecord = new AttendanceRecord();
         attendanceRecord.setStudent(student);

@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.UUID;
 
 public interface AttendanceRecordRepository extends JpaRepository<AttendanceRecord, UUID> {
+    boolean existsByStudent_UserIdAndAttendanceSession_Attendance_AttendanceId(UUID studentId, UUID attendanceId);
     List<AttendanceRecord> findByStudent_UserIdOrderByAttendAtDesc(UUID studentId);
     List<AttendanceRecord> findByAttendanceSession_Attendance_CourseInOrderByAttendAtDesc(Collection<Course> courses);
 }
