@@ -7,4 +7,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 public interface TermRepository extends JpaRepository<Term, Short> {
     boolean existsByTermName(String termName);
     boolean existsByAcademicYearStartAndTermType(Short academicYearStart, TermType termType);
+    boolean existsByTermNameAndIdNot(String termName, Short id);
+    boolean existsByAcademicYearStartAndTermTypeAndIdNot(Short academicYearStart, TermType termType, Short id);
 }
