@@ -21,6 +21,8 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import tools.jackson.databind.json.JsonMapper;
 
+import static org.springframework.http.HttpMethod.*;
+
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
@@ -50,22 +52,22 @@ public class SecurityConfig {
                 .dispatcherTypeMatchers(DispatcherType.ERROR).permitAll()
                 .requestMatchers(AUTHENTICATE, REGISTER, "/admin", "/admin/", "/admin/index.html", "/admin/app.js", "/admin/style.css", "/admin/logo.png", "/admin/login", SWAGGER_UI, API_DOCS)
                 .permitAll()
-                .requestMatchers(org.springframework.http.HttpMethod.GET, "/users/me", "/students/*", "/lecturers/*", "/lecturer-courses/lecturers/*/courses", "/attendance-records/students/*", "/attendance-records/lecturers/*").authenticated()
+                .requestMatchers(GET, "/users/me", "/students/*", "/lecturers/*", "/lecturer-courses/lecturers/*/courses", "/attendance-records/students/*", "/attendance-records/lecturers/*", "/terms", "/terms/*").authenticated()
                 .requestMatchers("/admin/**", "/languages", "/languages/**", "/faculties", "/faculties/**",
                         "/departments", "/departments/**", "/courses", "/courses/**", "/students", "/students/**",
                         "/lecturers", "/lecturers/**", "/student-courses", "/student-courses/**",
-                        "/lecturer-courses", "/lecturer-courses/**", "/users", "/users/**")
+                        "/lecturer-courses", "/lecturer-courses/**", "/users", "/users/**", "/terms", "/terms/**" )
                 .hasRole("ADMIN")
-                .requestMatchers(org.springframework.http.HttpMethod.POST, "/attendances").hasAnyRole("ADMIN", "LECTURER")
-                .requestMatchers(org.springframework.http.HttpMethod.GET, "/attendances").hasRole("ADMIN")
-                .requestMatchers(org.springframework.http.HttpMethod.GET, "/attendance-records").hasRole("ADMIN")
-                .requestMatchers(org.springframework.http.HttpMethod.POST, "/attendance-records").hasAnyRole("STUDENT", "ADMIN")
-                .requestMatchers(org.springframework.http.HttpMethod.GET, "/attendance-records/*").hasRole("ADMIN")
-                .requestMatchers(org.springframework.http.HttpMethod.POST, "/attendance-sessions/**").hasRole("ADMIN")
-                .requestMatchers(org.springframework.http.HttpMethod.PUT, "/attendance-sessions/**").hasRole("ADMIN")
-                .requestMatchers(org.springframework.http.HttpMethod.DELETE, "/attendance-sessions/**").hasRole("ADMIN")
-                .requestMatchers(org.springframework.http.HttpMethod.PUT, "/attendances/**", "/attendance-records/**").hasRole("ADMIN")
-                .requestMatchers(org.springframework.http.HttpMethod.DELETE, "/attendances/**", "/attendance-records/**").hasRole("ADMIN")
+                .requestMatchers(POST, "/attendances").hasAnyRole("ADMIN", "LECTURER")
+                .requestMatchers(GET, "/attendances").hasRole("ADMIN")
+                .requestMatchers(GET, "/attendance-records").hasRole("ADMIN")
+                .requestMatchers(POST, "/attendance-records").hasAnyRole("STUDENT", "ADMIN")
+                .requestMatchers(GET, "/attendance-records/*").hasRole("ADMIN")
+                .requestMatchers(POST, "/attendance-sessions/**").hasRole("ADMIN")
+                .requestMatchers(PUT, "/attendance-sessions/**").hasRole("ADMIN")
+                .requestMatchers(DELETE, "/attendance-sessions/**").hasRole("ADMIN")
+                .requestMatchers(PUT, "/attendances/**", "/attendance-records/**").hasRole("ADMIN")
+                .requestMatchers(DELETE, "/attendances/**", "/attendance-records/**").hasRole("ADMIN")
                 .anyRequest().authenticated())
                 .exceptionHandling(exceptions -> exceptions
                         .authenticationEntryPoint((request, response, exception) -> {
